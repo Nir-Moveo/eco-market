@@ -64,17 +64,76 @@ export const InfoContainer = styled.div`
 `;
 
 export const CardContainer = styled.div`
-  height: 230px;
+  height: 430px;
   width: 300px;
   background: white;
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
-  border-radius: 20px;
+  border-radius: 10px;
   display: flex;
+  flex-direction: column;
   margin: 0 24px 24px 0;
   overflow: auto;
 
   @media (max-width: 480px) {
     flex-direction: column;
     margin: 0 0 5% 0;
+  }
+`;
+
+export const SlideShow = styled.div`
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  /* Next & previous buttons */
+  .prev,
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+`;
+
+export const Slide = styled.div`
+  height: 200px;
+  overflow: hidden;
+  display: block;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+  }
+  /* Fading animation */
+  &.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+
+  &.hide {
+    display: none;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0.4;
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;

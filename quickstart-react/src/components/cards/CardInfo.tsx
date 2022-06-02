@@ -4,14 +4,14 @@ import React, { Component } from "react";
 import { ICard } from "./Card";
 import Tooltip from "@mui/material/Tooltip";
 import AvatarGroup from "@mui/material/AvatarGroup";
+import { colorsArr } from "../../colors";
 
 const CardInfo = (props: ICard) => {
   const { name, description, owner, interested_list, phone_number, published_at } = props;
 
   const randomColor = () => {
-    let hex = Math.floor(Math.random() * 0xffffff);
-    let color = "#" + hex.toString(16);
-    return color;
+    const randomIndex = Math.floor(Math.random() * colorsArr.length);
+    return colorsArr[randomIndex];
   };
 
   const renderInterestedAvatars = () => {

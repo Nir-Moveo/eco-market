@@ -1,6 +1,7 @@
 import React from "react";
 import { CardContainer } from "./CardStyle";
 import CardInfo from "./CardInfo";
+import ImagesCarousel from "./ImagesCarousel";
 
 export interface ICard {
   name: string;
@@ -13,10 +14,9 @@ export interface ICard {
 }
 
 const Card: React.FC<ICard> = (props: ICard) => {
-  const { name, description, owner, images, interested_list, phone_number, published_at } = props;
-
   return (
     <CardContainer>
+      <ImagesCarousel images={props.images} />
       <CardInfo {...props} />
     </CardContainer>
   );
