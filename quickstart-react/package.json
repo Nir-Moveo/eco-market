@@ -44,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "@types/styled-components": "^5.1.25",
     "concurrently": "^5.2.0",
     "cross-port-killer": "^1.2.1",
     "ngrok": "^3.2.7"
