@@ -5,6 +5,7 @@ const monday = mondaySdk();
 
 export const createNewBoard = async () => {
   const {boardId} = await monday.get("context")
+  console.log("board",boardId);
   await monday.storage.instance.setItem("board_id", boardId)
   const user_id = monday.api(
     `query {
@@ -12,7 +13,9 @@ export const createNewBoard = async () => {
         id
         }
     }
-    `).then((res)=> {return res.data.me.id})
+    `).then((res)=> {
+      console.log("user",res);
+      return res.data.me.id})
     await monday.storage.instance.setItem("my_id", user_id)
     const groups = await monday.get(
       `query {
@@ -22,7 +25,9 @@ export const createNewBoard = async () => {
           }
         }
      }`
-    ).then((res)=> {return res.data.boards[0].groups } )
+    ).then((res)=> {
+      console.log("groups",res);
+      return res.data.boards[0].groups } )
     if(!groups.includes({"id":"active_items"})){
         await Promise.all([
           monday.api(
@@ -84,7 +89,10 @@ export const createNewBoard = async () => {
           monday.storage.instance.setItem("phone_number", phone_number),
           monday.storage.instance.setItem("category", category),
         ])
-
+        console.log("description",description);
+        console.log("images",images);
+        console.log("interested",interested);
+        console.log("category",category);
     } 
   
 };
