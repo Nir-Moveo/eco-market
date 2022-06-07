@@ -10,8 +10,9 @@ interface MainFrameProps {}
 
 const MainFrame: React.FC<MainFrameProps> = () => {
 
-  // useEffect( ()=> { createNewBoard()},[]);
-
+  useEffect( ()=> { console.log("test");
+   createNewBoard()},[]);
+  
   return (
     <GeneralDiv>
     <Header />
