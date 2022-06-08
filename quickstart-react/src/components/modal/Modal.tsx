@@ -25,13 +25,13 @@ const styleImg = {
 
 
 };
-export interface IModal {
-  label: string;
-  description: string;
+// export interface IModal {
+//   label: string;
+//   description: string;
 
-}
+// }
 
-const ModalComponent: React.FC<IModal> = (props: IModal) => {
+const ModalComponent: React.FC = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
