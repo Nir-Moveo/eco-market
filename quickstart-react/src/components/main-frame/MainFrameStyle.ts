@@ -5,7 +5,7 @@ export const MainContainer = styled.div`
   justify-content: flex-start;
   flex-direction: row;
   align-items: flex-start;
-  width: 100%;
+  width: 95%;
   height: 100%;
 `;
 

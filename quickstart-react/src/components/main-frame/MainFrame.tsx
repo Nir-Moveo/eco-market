@@ -10,17 +10,15 @@ interface MainFrameProps {}
 
 const MainFrame: React.FC<MainFrameProps> = () => {
 
-  useEffect( ()=> { console.log("test");
-   createNewBoard()},[]);
+  // useEffect( ()=> { console.log("test");
+  //  createNewBoard()},[]);
   
   return (
     <GeneralDiv>
     <Header />
-
     <MainContainer>
       <SideMenu />
       <Home />
-
     </MainContainer>
     </GeneralDiv>
   );
