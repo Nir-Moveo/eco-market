@@ -5,7 +5,6 @@ import SideMenu from "../side-menu/views/SideMenu";
 import { GeneralDiv, MainContainer } from "./MainFrameStyle";
 import {createNewBoard} from '../../services/script';
 import Home from "../home/home";
-import Modal from "../modal/Modal";
 
 interface MainFrameProps {}
 
@@ -17,12 +16,9 @@ const MainFrame: React.FC<MainFrameProps> = () => {
   return (
     <GeneralDiv>
     <Header />
-
     <MainContainer>
       <SideMenu />
       <Home />
-      <Modal/>
-
     </MainContainer>
     </GeneralDiv>
   );

@@ -2,14 +2,26 @@ import * as React from 'react';
 import { Component } from 'react';
 import { images } from '../../constans';
 import Card from '../cards/Card';
-import { ContentDiv } from './homeStyle';
+import Modal from '../modal/Modal';
+import { HomeBody,ContentDiv, TopLine, MainTitle, SubTitle } from './homeStyle';
 
 interface HomeProps {
     
 }
  
 const Home: React.FC<HomeProps> = () => {
-    return ( <ContentDiv>
+    return ( 
+      <HomeBody>
+    <TopLine>
+      <div className="headlines">
+      <MainTitle>Today's best items</MainTitle>
+      <SubTitle>
+        You can save 24 trees by trading 1 t-shirt today!
+      </SubTitle>
+      </div>
+      <Modal/>
+    </TopLine>
+    <ContentDiv>
         <Card
           name="ZARA t-shirt"
           description="Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet"
@@ -43,7 +55,9 @@ const Home: React.FC<HomeProps> = () => {
           phone_number="23456"
           published_at={new Date().toDateString()}
         />
-    </ContentDiv> );
+    </ContentDiv>
+    </HomeBody>
+     );
 }
  
 export default Home;

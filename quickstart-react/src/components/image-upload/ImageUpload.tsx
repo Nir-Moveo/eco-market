@@ -8,7 +8,6 @@ const ImageUpload = () => {
     const [file, setFile] = useState<string>('')
     const [imagePreviewUrl, setimagePreviewUrl] = useState<any>('')
 
-
     const handleSubmit = (e: any) => {
         e.preventDefault();
     }
@@ -27,18 +26,16 @@ const ImageUpload = () => {
 
     return (
         <UploadContainer>
-            <form onSubmit={handleSubmit}>
-            {imagePreviewUrl ? '' : <img src={require('../../assets/upload.svg')} alt="upload" height="80" width="80" />}
-                <input style={{ display: 'none' }} id="fusk" type="file" onChange={handleImageChange} />
-                {imagePreviewUrl ? null : <label htmlFor="fusk"><span className='upload-btn'>Upload images</span>
-                </label>}
-            </form>
-            <img src={imagePreviewUrl} />
+            {!imagePreviewUrl && <form className="form-init" onSubmit={handleSubmit}>
+                 <img src={require('../../assets/upload.svg')} alt="upload" height="80" width="80" /> 
+                 <input style={{ display: 'none' }} id="fusk" type="file" onChange={handleImageChange} />
+                 <label className='upload-btn' htmlFor="fusk">
+                     <span>Upload images</span>
+                </label>
+            </form>}
+            {imagePreviewUrl && <img className="uploaded-images" alt="upload" src={imagePreviewUrl} /> }
         </UploadContainer>
     )
 }
-
-// }
-
 
 export default ImageUpload;

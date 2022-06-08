@@ -11,26 +11,21 @@ const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
+  height: 'calc(100%/1.2)',
+  overflowY:'auto',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 420,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
-  'border-radius': '16px'
+  borderRadius: '16px'
 };
 const styleImg = {
   position: 'absolute' as 'absolute',
   right: 10,
   top: 15,
-  cursor: 'pointer',
-
-
+  cursor: 'pointer'
 };
-// export interface IModal {
-//   label: string;
-//   description: string;
-
-// }
 
 const ModalComponent: React.FC = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -39,7 +34,7 @@ const ModalComponent: React.FC = (props) => {
 
   return (
     <ModalWrapper>
-      <Button onClick={handleOpen}>+ Add Item</Button>
+      <Button variant="contained" onClick={handleOpen}>+ Add Item</Button>
       <Modal
         open={open}
         onClose={handleClose}

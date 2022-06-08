@@ -57,12 +57,11 @@ const ModalInfo = (props: { onClose: () => void; }) => {
   return (
     <ModalContainer>
       <form className="form-container" noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Title>Add item for trades</Title>
-        <InputLabel shrink htmlFor="input">
+        <Title>Add items to trade</Title>
+        <InputLabel className='padding-top' shrink htmlFor="input">
           Item name
         </InputLabel>
         <TextField
-
           className='padding-bottom'
           onChange={(e) => setItem(e.target.value)}
           variant="outlined"
@@ -70,9 +69,8 @@ const ModalInfo = (props: { onClose: () => void; }) => {
           fullWidth
           required
           error={titleError}
-          id="input"
+          id="input-name"
           size="small"
-
         />
         <InputLabel className='padding-top' shrink htmlFor="input">
           Item description
@@ -84,20 +82,26 @@ const ModalInfo = (props: { onClose: () => void; }) => {
           fullWidth
           required
           error={titleError}
-          id="input"
+          id="input-description"
           size="small"
 
         />
-        <ContainerTitle>Upload images
+        <ContainerTitle>
+          <InputLabel className='padding-top' shrink htmlFor="input">
+            Upload images
+          </InputLabel>
           <ImageUpload />
         </ContainerTitle>
-        <ContainerTitle>Item's Category
+        <ContainerTitle>
+          <InputLabel className='padding-top' shrink htmlFor="input">
+            Item's Category
+          </InputLabel>
           <RadioCategory onChange={(e: any) => { onRadioChange(e) }} />
         </ContainerTitle>
         <Divider />
-        <ContainerTitle>Contact details
-          {/* <Checkbox onChange={(e: any) => { onCheckboxChange(e) }} /> */}
-        </ContainerTitle>
+          <InputLabel className='padding-top' shrink htmlFor="input">
+            Contact details
+          </InputLabel>
         <TextField
           onChange={(e) => setContact(e.target.value)}
           variant="outlined"
@@ -105,7 +109,7 @@ const ModalInfo = (props: { onClose: () => void; }) => {
           fullWidth
           required
           error={titleError}
-          id="input"
+          id="input-phone_number"
           className='margin-bottom'
           size="small"
 
