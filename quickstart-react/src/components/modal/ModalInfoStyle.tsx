@@ -16,7 +16,7 @@ img {
 }
 
 .padding-top{
-  padding-top: 16px ;
+  padding-top: 8px ;
 }
 .padding-bottom{
   padding-bottom: 8px ;

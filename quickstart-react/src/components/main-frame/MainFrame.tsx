@@ -11,8 +11,8 @@ interface MainFrameProps {}
 
 const MainFrame: React.FC<MainFrameProps> = () => {
 
-  useEffect( ()=> { console.log("test");
-   createNewBoard()},[]);
+  // useEffect( ()=> { console.log("test");
+  //  createNewBoard()},[]);
   
   return (
     <GeneralDiv>
@@ -21,7 +21,7 @@ const MainFrame: React.FC<MainFrameProps> = () => {
     <MainContainer>
       <SideMenu />
       <Home />
-      <Modal></Modal>
+      <Modal/>
 
     </MainContainer>
     </GeneralDiv>

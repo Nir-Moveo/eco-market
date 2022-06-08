@@ -49,7 +49,7 @@ const ModalInfo = (props: { onClose: () => void; }) => {
       phone: contact
     }
     console.log(payload)
-    if(titleError) {
+    if (titleError) {
       props.onClose();
     }
   }
@@ -57,11 +57,12 @@ const ModalInfo = (props: { onClose: () => void; }) => {
   return (
     <ModalContainer>
       <form className="form-container" noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Title>Add item for bla bla</Title>
+        <Title>Add item for trades</Title>
         <InputLabel shrink htmlFor="input">
           Item name
         </InputLabel>
         <TextField
+
           className='padding-bottom'
           onChange={(e) => setItem(e.target.value)}
           variant="outlined"
@@ -70,6 +71,8 @@ const ModalInfo = (props: { onClose: () => void; }) => {
           required
           error={titleError}
           id="input"
+          size="small"
+
         />
         <InputLabel className='padding-top' shrink htmlFor="input">
           Item description
@@ -82,6 +85,8 @@ const ModalInfo = (props: { onClose: () => void; }) => {
           required
           error={titleError}
           id="input"
+          size="small"
+
         />
         <ContainerTitle>Upload images
           <ImageUpload />
@@ -93,16 +98,18 @@ const ModalInfo = (props: { onClose: () => void; }) => {
         <ContainerTitle>Contact details
           {/* <Checkbox onChange={(e: any) => { onCheckboxChange(e) }} /> */}
         </ContainerTitle>
-          <TextField
-            onChange={(e) => setContact(e.target.value)}
-            variant="outlined"
-            placeholder="Phone number"
-            fullWidth
-            required
-            error={titleError}
-            id="input"
-            className='margin-bottom'
-          />
+        <TextField
+          onChange={(e) => setContact(e.target.value)}
+          variant="outlined"
+          placeholder="Phone number"
+          fullWidth
+          required
+          error={titleError}
+          id="input"
+          className='margin-bottom'
+          size="small"
+
+        />
         <Box className='button'
         >
 

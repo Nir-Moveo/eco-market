@@ -16,11 +16,12 @@ const style = {
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
+  'border-radius': '16px'
 };
 const styleImg = {
   position: 'absolute' as 'absolute',
-  right: 5,
-  top: 5,
+  right: 10,
+  top: 15,
   cursor: 'pointer',
 
 

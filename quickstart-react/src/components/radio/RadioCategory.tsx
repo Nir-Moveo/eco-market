@@ -7,9 +7,9 @@ import FormControl from '@mui/material/FormControl';
 export interface IRadio {
   label: string;
 }
-const RadioCategory = (props:any) => {
-    const handleChange = (event:any) => {
-      props.onChange(event);
+const RadioCategory = (props: any) => {
+  const handleChange = (event: any) => {
+    props.onChange(event);
   }
   return (
     <FormControl>
@@ -17,13 +17,17 @@ const RadioCategory = (props:any) => {
         row
         name="row-radio-buttons-group"
       >
-        <FormControlLabel value="Clothing" control={<Radio onChange={(e) => handleChange(e.target.value)}
+        <FormControlLabel value="Clothing" control={<Radio size="small"
+          onChange={(e) => handleChange(e.target.value)}
         />} label="Clothing" />
-        <FormControlLabel value="Electricty" control={<Radio onChange={(e) => handleChange(e.target.value)}
+        <FormControlLabel value="Electricty" control={<Radio size="small"
+          onChange={(e) => handleChange(e.target.value)}
         />} label="Electricty" />
-        <FormControlLabel value="Furniture" control={<Radio onChange={(e) => handleChange(e.target.value)}
+        <FormControlLabel value="Furniture" control={<Radio size="small"
+          onChange={(e) => handleChange(e.target.value)}
         />} label="Furniture" />
-        <FormControlLabel value="Other" control={<Radio onChange={(e) => handleChange(e.target.value)}
+        <FormControlLabel value="Other" control={<Radio size="small"
+          onChange={(e) => handleChange(e.target.value)}
         />} label="Other" />
       </RadioGroup>
     </FormControl>
