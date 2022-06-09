@@ -65,15 +65,33 @@ export const InfoContainer = styled.div`
 
 export const CardContainer = styled.div`
   height: 430px;
-  width: 300px;
-  background: white;
+  width: 228px;
+  background: ${Colors.GREY};
+  border: 1px solid ${Colors.GREEN};
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   margin: 0 24px 24px 0;
   overflow: auto;
-
+  .avatar-group > .MuiAvatar-root,
+  .avatar {
+    height: 28px;
+    width: 28px;
+    font-size: 12px;
+  }
+  .avatar:hover {
+    cursor: pointer;
+  }
+  .interested-text {
+    color: ${Colors.DARK_GREEN};
+    font-size: 12px;
+  }
+  .intrested-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
   @media (max-width: 480px) {
     flex-direction: column;
     margin: 0 0 5% 0;
@@ -94,7 +112,7 @@ export const SlideShow = styled.div`
     margin-top: -22px;
     padding: 16px;
     color: white;
-    font-weight: bold;
+    font-weight: 100;
     font-size: 18px;
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;

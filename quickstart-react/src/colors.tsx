@@ -1,6 +1,9 @@
 export enum Colors {
   PRIMARY_BLACK = "#323338",
   PRIMARY_GREY = "#7b7d89",
+  GREY = "#F5F6F8",
+  GREEN = "#BBDBC9",
+  DARK_GREEN = "#258750",
 }
 
 export const colorsArr = [
