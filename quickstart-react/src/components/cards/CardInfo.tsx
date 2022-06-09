@@ -1,15 +1,18 @@
 import { Title, Image, Description, Date, InfoContainer } from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
 import React, { Component, useState } from "react";
-import { ICard } from "./Card";
+import { ICard } from "../../types/types";
+
 import Tooltip from "@mui/material/Tooltip";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { colorsArr } from "../../colors";
 import { CustomBanner } from "./Banner";
 
 const CardInfo = (props: ICard) => {
-  const { name, description, owner, interested_list, phone_number, published_at } = props;
+
+  const { name, description, owner, interested, published_at } = props;
   const [showHover, setShowHover] = useState(false);
+
 
   const creator = {
     photo: undefined,
@@ -28,6 +31,7 @@ const CardInfo = (props: ICard) => {
   };
 
   const renderInterestedAvatars = () => {
+
     return interested_list.map((name) => {
       return (
         <Tooltip title={name}>
@@ -54,8 +58,9 @@ const CardInfo = (props: ICard) => {
           onMouseOver={(e) => setShowHover(true)}
           onMouseLeave={(e) => setShowHover(false)}
         >
-          {owner[0]}
+          {/* {owner[0]} */}
         </Avatar>
+
         {showHover && <CustomBanner {...creator}></CustomBanner>}
         <span className="display-name">{owner}</span>
       </div>
@@ -66,6 +71,7 @@ const CardInfo = (props: ICard) => {
           <Description>{description}</Description>
         </Tooltip>
       </div>
+
       <div className="intrested-container">
         <AvatarGroup className="avatar-group" max={4}>
           {renderInterestedAvatars()}

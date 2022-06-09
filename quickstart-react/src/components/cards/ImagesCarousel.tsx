@@ -1,5 +1,5 @@
 import React from "react";
-import { images } from "../../constans";
+import { images } from "../../constants";
 import { SlideShow, Slide } from "./CardStyle";
 import { useState } from "react";
 
