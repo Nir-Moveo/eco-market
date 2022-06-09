@@ -2,15 +2,28 @@ import * as React from 'react';
 import { Component } from 'react';
 import { images } from '../../constants';
 import Card from '../cards/Card';
-import { ContentDiv } from './homeStyle';
+import Modal from '../modal/Modal';
+import { HomeBody,ContentDiv, TopLine, MainTitle, SubTitle } from './homeStyle';
 
 interface HomeProps {
     
 }
  
 const Home: React.FC<HomeProps> = () => {
-    return ( <ContentDiv>
-        {/* <Card
+
+    return ( 
+      <HomeBody>
+    <TopLine>
+      <div className="headlines">
+      <MainTitle>Today's best items</MainTitle>
+      <SubTitle>
+        You can save 24 trees by trading 1 t-shirt today!
+      </SubTitle>
+      </div>
+      <Modal/>
+    </TopLine>
+    <ContentDiv>
+        <Card
           name="ZARA t-shirt"
           description="Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet"
           // owner="ofek ben david"
@@ -42,9 +55,10 @@ const Home: React.FC<HomeProps> = () => {
           // interested={["alon gilad", "or levi", "ofek ben", "asff", "dsgfh"]}
           phone_number="23456"
           published_at={new Date().toDateString()}
-      />
-      <CardList/> */}
-    </ContentDiv> );
+        />
+    </ContentDiv>
+    </HomeBody>
+     );
 }
  
 export default Home;

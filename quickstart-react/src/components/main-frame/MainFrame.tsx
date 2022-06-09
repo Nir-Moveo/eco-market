@@ -11,11 +11,9 @@ const MainFrame: React.FC<MainFrameProps> = () => {
   return (
     <GeneralDiv>
     <Header />
-
     <MainContainer>
       <SideMenu />
       <Home />
-
     </MainContainer>
     </GeneralDiv>
   );

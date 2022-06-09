@@ -1,46 +1,68 @@
 import { Title, Image, Description, Date, InfoContainer } from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { ICard } from "../../types/types";
+
 import Tooltip from "@mui/material/Tooltip";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { colorsArr } from "../../colors";
+import { CustomBanner } from "./Banner";
 
 const CardInfo = (props: ICard) => {
-  const { name, description, owner, interested, published_at } = props;
 
-  const randomColor = () => {
-    const randomIndex = Math.floor(Math.random() * colorsArr.length);
-    return colorsArr[randomIndex];
+  const { name, description, owner, interested, published_at } = props;
+  const [showHover, setShowHover] = useState(false);
+
+
+  const creator = {
+    photo: undefined,
+    phone: phone_number,
+    name: owner,
+    email: "ofek@moveohls.com",
+  };
+  const randomColor = (name: string) => {
+    const randomIndex = name.charCodeAt(1) - 97;
+    var sum = 0;
+    for (let i = 0; i < name.length; i++) {
+      sum += name.charCodeAt(i);
+    }
+    const colorIndex = sum % colorsArr.length;
+    return colorsArr[colorIndex];
   };
 
   const renderInterestedAvatars = () => {
-    // return interested_list.map((name) => {
-    //   return (
-    //     <Tooltip title={name}>
-    //       <Avatar
-    //         style={{
-    //           backgroundColor: randomColor(),
-    //         }}
-    //       >
-    //         {name[0]}
-    //       </Avatar>
-    //     </Tooltip>
-    //   );
-    // });
+
+    return interested_list.map((name) => {
+      return (
+        <Tooltip title={name}>
+          <Avatar
+            style={{
+              backgroundColor: randomColor(name),
+            }}
+          >
+            {name[0]}
+          </Avatar>
+        </Tooltip>
+      );
+    });
   };
 
   return (
     <InfoContainer>
       <div className="owner-container">
         <Avatar
+          className="avatar"
           style={{
-            backgroundColor: randomColor(),
+            backgroundColor: randomColor(owner),
           }}
+          onMouseOver={(e) => setShowHover(true)}
+          onMouseLeave={(e) => setShowHover(false)}
         >
           {/* {owner[0]} */}
         </Avatar>
-        <span className="display-name">{owner.display_name}</span>
+
+        {showHover && <CustomBanner {...creator}></CustomBanner>}
+        <span className="display-name">{owner}</span>
       </div>
       <div className="item-info-container">
         <Title>{name}</Title>
@@ -49,7 +71,13 @@ const CardInfo = (props: ICard) => {
           <Description>{description}</Description>
         </Tooltip>
       </div>
-      {/* <AvatarGroup max={4}>{renderInterestedAvatars()}</AvatarGroup> */}
+
+      <div className="intrested-container">
+        <AvatarGroup className="avatar-group" max={4}>
+          {renderInterestedAvatars()}
+        </AvatarGroup>
+        {interested_list.length > 0 && <span className="interested-text">Are intrested!</span>}
+      </div>
     </InfoContainer>
   );
 };
