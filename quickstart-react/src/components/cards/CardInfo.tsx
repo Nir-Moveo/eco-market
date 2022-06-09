@@ -1,13 +1,13 @@
 import { Title, Image, Description, Date, InfoContainer } from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
 import React, { Component } from "react";
-import { ICard } from "./Card";
+import { ICard } from "../../types/types";
 import Tooltip from "@mui/material/Tooltip";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { colorsArr } from "../../colors";
 
 const CardInfo = (props: ICard) => {
-  const { name, description, owner, interested_list, phone_number, published_at } = props;
+  const { name, description, owner, interested, published_at } = props;
 
   const randomColor = () => {
     const randomIndex = Math.floor(Math.random() * colorsArr.length);
@@ -15,19 +15,19 @@ const CardInfo = (props: ICard) => {
   };
 
   const renderInterestedAvatars = () => {
-    return interested_list.map((name) => {
-      return (
-        <Tooltip title={name}>
-          <Avatar
-            style={{
-              backgroundColor: randomColor(),
-            }}
-          >
-            {name[0]}
-          </Avatar>
-        </Tooltip>
-      );
-    });
+    // return interested_list.map((name) => {
+    //   return (
+    //     <Tooltip title={name}>
+    //       <Avatar
+    //         style={{
+    //           backgroundColor: randomColor(),
+    //         }}
+    //       >
+    //         {name[0]}
+    //       </Avatar>
+    //     </Tooltip>
+    //   );
+    // });
   };
 
   return (
@@ -38,9 +38,9 @@ const CardInfo = (props: ICard) => {
             backgroundColor: randomColor(),
           }}
         >
-          {owner[0]}
+          {/* {owner[0]} */}
         </Avatar>
-        <span className="display-name">{owner}</span>
+        <span className="display-name">{owner.display_name}</span>
       </div>
       <div className="item-info-container">
         <Title>{name}</Title>
@@ -49,7 +49,7 @@ const CardInfo = (props: ICard) => {
           <Description>{description}</Description>
         </Tooltip>
       </div>
-      <AvatarGroup max={4}>{renderInterestedAvatars()}</AvatarGroup>
+      {/* <AvatarGroup max={4}>{renderInterestedAvatars()}</AvatarGroup> */}
     </InfoContainer>
   );
 };
