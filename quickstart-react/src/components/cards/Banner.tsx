@@ -1,20 +1,20 @@
 import React from "react";
+import { IUser } from "../../types/types";
 import { BannerContainer } from "./BannerStyle";
-interface IBanner {
-  photo: string | undefined;
-  phone: string;
-  name: string;
-  email: string;
-}
-export const CustomBanner = (creator: IBanner) => {
+
+export const CustomBanner = (creator: IUser) => {
   return (
     <BannerContainer>
       <div className="banner">
         <img
-          src={creator && creator.photo ? creator.photo : "https://cdn7.monday.com/icons/dapulse-person-column.svg"}
+          src={
+            creator && creator.profile_picture
+              ? creator.profile_picture
+              : "https://cdn7.monday.com/icons/dapulse-person-column.svg"
+          }
         />
         <div className="info">
-          <span className="name">{creator ? creator.name : "Unknown"}</span>
+          <span className="name">{creator ? creator.display_name : "Unknown"}</span>
           <span className="email">{creator ? creator.email : null}</span>
           <span className="email">{creator ? creator.phone : null}</span>
         </div>

@@ -123,6 +123,12 @@ export const SlideShow = styled.div`
     right: 0;
     border-radius: 3px 0 0 3px;
   }
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+  }
 `;
 
 export const Slide = styled.div`
@@ -154,4 +160,9 @@ export const Slide = styled.div`
       opacity: 1;
     }
   }
+`;
+
+export const CardListContainer = styled.div`
+  display: flex;
+  flex-flow: wrap;
 `;
