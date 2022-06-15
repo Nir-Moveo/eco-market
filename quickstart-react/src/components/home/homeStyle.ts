@@ -8,9 +8,6 @@ export const HomeBody = styled.div`
 `;
 
 export const ContentDiv = styled.div`
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-template-rows: auto;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -32,7 +29,7 @@ export const MainTitle = styled.span`
   font-weight: 700;
   font-size: 1.5rem;
   line-height: 24px;
-  padding-bottom:8px;
+  padding-bottom: 8px;
 `;
 
 export const SubTitle = styled.span`

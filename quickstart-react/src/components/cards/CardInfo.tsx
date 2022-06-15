@@ -9,38 +9,34 @@ import { colorsArr } from "../../colors";
 import { CustomBanner } from "./Banner";
 
 const CardInfo = (props: ICard) => {
-
   const { name, description, owner, interested, published_at } = props;
   const [showHover, setShowHover] = useState(false);
 
-
-  const creator = {
-    photo: undefined,
-    phone: phone_number,
-    name: owner,
-    email: "ofek@moveohls.com",
-  };
   const randomColor = (name: string) => {
-    const randomIndex = name.charCodeAt(1) - 97;
-    var sum = 0;
-    for (let i = 0; i < name.length; i++) {
-      sum += name.charCodeAt(i);
-    }
-    const colorIndex = sum % colorsArr.length;
-    return colorsArr[colorIndex];
+    if (name) {
+      var sum = 0;
+      for (let i = 1; i < name.length; i++) {
+        sum += name.charCodeAt(i);
+      }
+      const colorIndex = sum % colorsArr.length;
+
+      return colorsArr[colorIndex];
+    } else return colorsArr[0];
   };
 
   const renderInterestedAvatars = () => {
-
-    return interested_list.map((name) => {
+    return interested?.map((user) => {
+      const userName = user.display_name;
+      const profilePicture = user.profile_picture;
       return (
-        <Tooltip title={name}>
+        <Tooltip title={userName}>
           <Avatar
+            src={profilePicture}
             style={{
-              backgroundColor: randomColor(name),
+              backgroundColor: randomColor(userName),
             }}
           >
-            {name[0]}
+            {userName[0]}
           </Avatar>
         </Tooltip>
       );
@@ -52,8 +48,9 @@ const CardInfo = (props: ICard) => {
       <div className="owner-container">
         <Avatar
           className="avatar"
+          src={owner && owner.profile_picture}
           style={{
-            backgroundColor: randomColor(owner),
+            backgroundColor: randomColor(owner.display_name),
           }}
           onMouseOver={(e) => setShowHover(true)}
           onMouseLeave={(e) => setShowHover(false)}
@@ -61,8 +58,8 @@ const CardInfo = (props: ICard) => {
           {/* {owner[0]} */}
         </Avatar>
 
-        {showHover && <CustomBanner {...creator}></CustomBanner>}
-        <span className="display-name">{owner}</span>
+        {showHover && <CustomBanner {...owner}></CustomBanner>}
+        <span className="display-name">{owner.display_name}</span>
       </div>
       <div className="item-info-container">
         <Title>{name}</Title>
@@ -76,7 +73,7 @@ const CardInfo = (props: ICard) => {
         <AvatarGroup className="avatar-group" max={4}>
           {renderInterestedAvatars()}
         </AvatarGroup>
-        {interested_list.length > 0 && <span className="interested-text">Are intrested!</span>}
+        {interested?.length > 0 && <span className="interested-text">Are intrested!</span>}
       </div>
     </InfoContainer>
   );

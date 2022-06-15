@@ -1,64 +1,41 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { images } from '../../constants';
-import Card from '../cards/Card';
-import Modal from '../modal/Modal';
-import { HomeBody,ContentDiv, TopLine, MainTitle, SubTitle } from './homeStyle';
+import * as React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { getAllItems } from "../../services/monday.api";
+import { ICardList } from "../../types/types";
+import CardList from "../cards/CardList";
+import Modal from "../modal/Modal";
+import { HomeBody, ContentDiv, TopLine, MainTitle, SubTitle } from "./homeStyle";
 
-interface HomeProps {
-    
-}
- 
+interface HomeProps {}
+
 const Home: React.FC<HomeProps> = () => {
+  const [cards, setCards] = useState<ICardList>([]);
 
-    return ( 
-      <HomeBody>
-    <TopLine>
-      <div className="headlines">
-      <MainTitle>Today's best items</MainTitle>
-      <SubTitle>
-        You can save 24 trees by trading 1 t-shirt today!
-      </SubTitle>
-      </div>
-      <Modal/>
-    </TopLine>
-    <ContentDiv>
-        <Card
-          name="ZARA t-shirt"
-          description="Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet"
-          // owner="ofek ben david"
-          // images={images}
-          // interested={["alon gilad", "or levi", "ofek ben", "asff", "dsgfh"]}
-          phone_number="23456"
-          published_at={new Date().toDateString()}
-        />
-        <Card
-          name="Ikea sofa"
-          description="asdf Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor sametg"
-          // owner="ofek ben david"
-          // interested={["alon gilad", "or levi", "ofek ben", "asff", "dsgfh"]}
-          phone_number="23456"
-          published_at={new Date().toDateString()}
-        />
-        <Card
-          name="Ikea sofa"
-          description="asdf Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor sametg"
-          // owner="ofek ben david"
-          // interested={["alon gilad", "or levi", "ofek ben", "asff", "dsgfh"]}
-          phone_number="23456"
-          published_at={new Date().toDateString()}
-        />
-        <Card
-          name="Ikea sofa"
-          description="asdf Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor samet Popover message will appear here loremipsum dolor sametg"
-          // owner="ofek ben david"
-          // interested={["alon gilad", "or levi", "ofek ben", "asff", "dsgfh"]}
-          phone_number="23456"
-          published_at={new Date().toDateString()}
-        />
-    </ContentDiv>
+  useEffect(() => {
+    getCards();
+  }, []);
+
+  async function getCards() {
+    const tmpCards = await getAllItems();
+    console.log("tmpCards: ", tmpCards);
+
+    setCards(tmpCards);
+  }
+  return (
+    <HomeBody>
+      <TopLine>
+        <div className="headlines">
+          <MainTitle>Today's best items</MainTitle>
+          <SubTitle>You can save 24 trees by trading 1 t-shirt today!</SubTitle>
+        </div>
+        <Modal />
+      </TopLine>
+      <ContentDiv>
+        <CardList cards={cards}></CardList>
+      </ContentDiv>
     </HomeBody>
-     );
-}
- 
+  );
+};
+
 export default Home;

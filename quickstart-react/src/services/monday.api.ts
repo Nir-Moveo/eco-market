@@ -8,7 +8,7 @@ const monday = mondaySdk();
 // Context
 export const fetchContext = () => {
   return monday.get("context");
-}
+};
 
 // Storage
 export const storageGetItem = async (key: string) => {
@@ -20,42 +20,50 @@ export const storageSetItem = async (key: string, value: any) => {
 };
 
 export const columnIdsFromStorage = async (columnNames: string[]) => {
-  const ids = await Promise.all(columnNames.map(async (c) => {
-    const id = await storageGetItem(c);
-    return { [c]: id };
-  }));
-  return Object.assign({}, ...ids );
-}
+  const ids = await Promise.all(
+    columnNames.map(async (c) => {
+      const id = await storageGetItem(c);
+      return { [c]: id };
+    })
+  );
+  return Object.assign({}, ...ids);
+};
 
 // Groups
 const createGroup = async (boardId: number, name: string) => {
-  const { data: { create_group: { id:groupId } } }: any = await monday.api( `mutation{
+  const {
+    data: {
+      create_group: { id: groupId },
+    },
+  }: any = await monday.api(`mutation{
     create_group(board_id:${boardId}, group_name:${name}){
       id
     }
   }`);
   return groupId;
-}
+};
 
 export const initializeGroups = async (boardId: number) => {
-  await createGroup(boardId, Groups.Active).then( async id => {
+  await createGroup(boardId, Groups.Active).then(async (id) => {
     await storageSetItem(Groups.Active, id);
-    });
-  await createGroup(boardId, Groups.Sold).then(async id => {
+  });
+  await createGroup(boardId, Groups.Sold).then(async (id) => {
     await storageSetItem(Groups.Sold, id);
   });
-}
+};
 
 export const fetchGroups = async (boardId: number) => {
-  const { data: { boards } }: any = await monday.api(`query{
+  const {
+    data: { boards },
+  }: any = await monday.api(`query{
     boards(ids: ${boardId}){
       groups{
         id
       }
     }
   }`);
-  return boards[0].groups.map((g:{id: string}) => g.id);
-}
+  return boards[0].groups.map((g: { id: string }) => g.id);
+};
 
 export const moveItemToGroup = async (itemId: number, groupName: string) => {
   const groupId = await storageGetItem(groupName);
@@ -64,11 +72,15 @@ export const moveItemToGroup = async (itemId: number, groupName: string) => {
       id
     }
   }`);
-}
+};
 
 // Columns
 const createColumn = async (boardId: number, title: Columns, columnType: string): Promise<string> => {
-  const { data: { "create_column": { id: columnId } } }: any = await monday.api(`mutation{
+  const {
+    data: {
+      create_column: { id: columnId },
+    },
+  }: any = await monday.api(`mutation{
     create_column(board_id: ${boardId}, title: "${title}", column_type: ${columnType}){
       id
     }
@@ -77,44 +89,54 @@ const createColumn = async (boardId: number, title: Columns, columnType: string)
 };
 
 export const initializeColumns = async (boardId: number) => {
-  await createColumn(boardId, Columns.Description, "text").then( async id => {
+  await createColumn(boardId, Columns.Description, "text").then(async (id) => {
     await storageSetItem(Columns.Description, id);
   });
-  await createColumn(boardId, Columns.Interested, "people").then( async id => {
+  await createColumn(boardId, Columns.Interested, "people").then(async (id) => {
     await storageSetItem(Columns.Interested, id);
   });
-  await createColumn(boardId, Columns.Images, "file").then( async id => {
+  await createColumn(boardId, Columns.Images, "file").then(async (id) => {
     await storageSetItem(Columns.Images, id);
   });
-  await createColumn(boardId, Columns.Category, "text").then( async id => {
+  await createColumn(boardId, Columns.Category, "text").then(async (id) => {
     await storageSetItem(Columns.Category, id);
   });
-}
+};
 
 export const fetchColumns = async (boardId: number) => {
-  const { data: { boards } }: any = await monday.api(`query{
+  const {
+    data: { boards },
+  }: any = await monday.api(`query{
     boards(ids: ${boardId}){
       columns{
         id
       }
     }
   }`);
-  return boards[0].columns.map((c:{id: string}) => c.id);
-}
+  return boards[0].columns.map((c: { id: string }) => c.id);
+};
 
 // Items
 export const addNewItem = async (item: RawItem) => {
-  const { data: { boardId } } = await fetchContext();
+  const {
+    data: { boardId },
+  } = await fetchContext();
   const columns = await columnIdsFromStorage([Columns.Description, Columns.Category, Columns.Images]);
   const groupId = await storageGetItem(Groups.Active);
 
-  const { data: {create_item: {id: itemId}}}: any = await monday.api(`
+  const {
+    data: {
+      create_item: { id: itemId },
+    },
+  }: any = await monday.api(`
       mutation {
         create_item(
           board_id: ${boardId},
           group_id: "${groupId}",
           item_name: "${item.name}",
-          column_values:"{\\\"${columns[Columns.Description]}\\\":\\\"${item.description}\\\",\\\"${columns[Columns.Category]}\\\":\\\"${item.category}\\\"}"){
+          column_values:"{\\\"${columns[Columns.Description]}\\\":\\\"${item.description}\\\",\\\"${
+    columns[Columns.Category]
+  }\\\":\\\"${item.category}\\\"}"){
           id
         }
       }
@@ -124,20 +146,26 @@ export const addNewItem = async (item: RawItem) => {
 
 export const addImagesToItem = async (itemId: number, columnId: string, images: FileList) => {
   for (let i = 0; i < images.length; i++) {
-    await monday.api(`mutation ($file: File!){
+    await monday.api(
+      `mutation ($file: File!){
       add_file_to_column (item_id: ${itemId}, column_id:"${columnId}", file: $file) {
         id
       }
-    }`, {variables:{file: images[i]}});
-  };
+    }`,
+      { variables: { file: images[i] } }
+    );
+  }
 };
 
 export const getAllItems = async (): Promise<ICard[]> => {
-  const { data: { boardId } } = await fetchContext();
+  const { data } = await fetchContext();
+  const boardId = data.boardId;
 
-  const rawItems = await monday.api(`
+  const rawItems = await monday
+    .api(
+      `
         query { 
-          boards(ids:${boardId}){
+          boards(ids: ${boardId}){
             items  { 
               id
               name
@@ -156,57 +184,62 @@ export const getAllItems = async (): Promise<ICard[]> => {
             } 
           } 
         }
-      }`)
+      }`
+    )
     .then((res: any) => {
       return res.data.boards[0].items;
     });
-  
-  const data = Promise.all(rawItems.map(async (item: any) => {
-    let phone_number;
-    let images;
-    let description;
-    let interested;
-    let category;
 
-    await Promise.all(item.column_values?.map(async (c: IColumnValues) => {
-      switch (c.title) {
-        case Columns.Description:
-          description = c.text;
-          break;
-        case Columns.Images:
-          images = c.text.split(`, `);
-          break;
-        case Columns.Category:
-          category = c.text
-          break;
-        case Columns.Interested:
-          if (c.value) {
-            const userIds = JSON.parse(c.value).personsAndTeams?.map((u: any) => u.id);
-            interested = await fetchInterested(userIds);
+  const resData = Promise.all(
+    rawItems.map(async (item: any) => {
+      let phone_number;
+      let images;
+      let description;
+      let interested;
+      let category;
+
+      await Promise.all(
+        item.column_values?.map(async (c: IColumnValues) => {
+          switch (c.title) {
+            case Columns.Description:
+              description = c.text;
+              break;
+            case Columns.Images:
+              images = c.text.split(`, `);
+              break;
+            case Columns.Category:
+              category = c.text;
+              break;
+            case Columns.Interested:
+              if (c.value) {
+                const userIds = JSON.parse(c.value).personsAndTeams?.map((u: any) => u.id);
+                interested = await fetchInterested(userIds);
+              }
+              break;
           }
-          break;
-      }
-    }));
+        })
+      );
 
-    return {
-      id: item.id,
-      name: item.name,
-      description,
-      images,
-      category,
-      interested,
-      owner: {
-        display_name: item.creator?.name,
-        profile_picture: item.creator?.photo_tiny,
-        email: item.creator?.email,
-        phone: item.creator?.phone
-      },
-      created_at: item.created_at,
-      phone_number,
-    }
-  }));
+      return {
+        id: item.id,
+        name: item.name,
+        description,
+        images,
+        category,
+        interested,
+        owner: {
+          display_name: item.creator?.name,
+          profile_picture: item.creator?.photo_tiny,
+          email: item.creator?.email,
+          phone: item.creator?.phone,
+        },
+        created_at: item.created_at,
+        phone_number,
+      };
+    })
+  );
 
-  return data;
+  return resData;
 };
 
 export const deleteItem = async (itemId: number) => {
@@ -218,21 +251,27 @@ export const deleteItem = async (itemId: number) => {
 };
 
 // Users
-const fetchInterested = async (userIds: number[]): Promise<{display_name: string, profile_picture: string}[]> => {
-  const { data: { users } }: any = await monday.api(`query{
+const fetchInterested = async (userIds: number[]): Promise<{ display_name: string; profile_picture: string }[]> => {
+  const {
+    data: { users },
+  }: any = await monday.api(`query{
       users(ids:[${userIds}]){
         name
         photo_tiny
       }
-    }`
-  );
+    }`);
 
   return users.map((u: any) => ({ display_name: u.name, profile_picture: u.photo_tiny }));
-}
+};
 
 //add item to user wishlist (add the user to item interested)
 export const addToWishList = async (itemId: number) => {
-  const { data: { boardId, user: { id: userId } } } = await fetchContext();
+  const {
+    data: {
+      boardId,
+      user: { id: userId },
+    },
+  } = await fetchContext();
   const interestedId = await columnIdsFromStorage([Columns.Interested]);
 
   const rawUsers = await monday
@@ -245,7 +284,8 @@ export const addToWishList = async (itemId: number) => {
           }
         }
       }
-    }`)
+    }`
+    )
     .then((res: any) => {
       return res.data.boards[0].items[0].column_values[0].value;
     });
@@ -313,8 +353,6 @@ export const addToWishList = async (itemId: number) => {
 //   }
 // };
 
-
-
 // //delete all photos from item
 // export const removeAllPhotosFromItem = async (item_id) => {
 //   monday.api(
@@ -368,6 +406,3 @@ export const addToWishList = async (itemId: number) => {
 //     `
 //   );
 // };
-
-
-
