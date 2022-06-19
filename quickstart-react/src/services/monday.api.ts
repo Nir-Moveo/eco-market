@@ -1,7 +1,6 @@
 import mondaySdk from "monday-sdk-js";
-import * as _ from "lodash";
 
-import { Columns, Groups, ICard, IColumnValues, RawItem } from "../types/types";
+import { Categories, Columns, Groups, ICard, IColumnValues, RawItem } from "../types/types";
 
 const monday = mondaySdk();
 
@@ -19,6 +18,16 @@ export const storageSetItem = async (key: string, value: any) => {
   return monday.storage.instance.setItem(key, value);
 };
 
+export const setColumnIdsToStorage = async (columnIds: string[]) => {
+  return Promise.all(columnIds.map(c => {
+    if (new RegExp(`^${Columns.Category}`).test(c)) return storageSetItem(Columns.Category, c);
+    else if (new RegExp(`^${Columns.Name}`).test(c)) return storageSetItem(Columns.Name, c);
+    else if (new RegExp(`^${Columns.Description}`).test(c)) return storageSetItem(Columns.Description, c);
+    else if (new RegExp(`^${Columns.Images}`).test(c)) return storageSetItem(Columns.Images, c);
+    else if (new RegExp(`^${Columns.Interested}`).test(c)) return storageSetItem(Columns.Interested, c);
+  }));
+}
+
 export const columnIdsFromStorage = async (columnNames: string[]) => {
   const ids = await Promise.all(
     columnNames.map(async (c) => {
@@ -28,6 +37,13 @@ export const columnIdsFromStorage = async (columnNames: string[]) => {
   );
   return Object.assign({}, ...ids);
 };
+
+export const setGroupIdsToStorage = (groups: string[]) => {
+  return Promise.all([
+    storageSetItem(Groups.Active, groups.filter((g: string) => g.match(`^${Groups.Active}`))[0]),
+    storageSetItem(Groups.Sold, groups.filter((g: string) => g.match(`^${Groups.Sold}`))[0])
+  ]);
+}
 
 // Groups
 const createGroup = async (boardId: number, name: string) => {
@@ -89,6 +105,9 @@ const createColumn = async (boardId: number, title: Columns, columnType: string)
 };
 
 export const initializeColumns = async (boardId: number) => {
+  await createColumn(boardId, Columns.Name, "text").then(async (id) => {
+    await storageSetItem(Columns.Name, id);
+  });
   await createColumn(boardId, Columns.Description, "text").then(async (id) => {
     await storageSetItem(Columns.Description, id);
   });
@@ -141,6 +160,7 @@ export const addNewItem = async (item: RawItem) => {
         }
       }
   `);
+
   if (item.images?.length) await addImagesToItem(itemId, columns[Columns.Images], item.images);
 };
 
@@ -157,9 +177,9 @@ export const addImagesToItem = async (itemId: number, columnId: string, images: 
   }
 };
 
-export const getAllItems = async (): Promise<ICard[]> => {
-  const { data } = await fetchContext();
-  const boardId = data.boardId;
+export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
+  const { data: { boardId } } = await fetchContext();
+  const groupId = await storageGetItem(group);
 
   const rawItems = await monday
     .api(
@@ -169,6 +189,9 @@ export const getAllItems = async (): Promise<ICard[]> => {
             items  { 
               id
               name
+              group {
+                id
+              }
               created_at
               creator { 
                 name 
@@ -189,9 +212,195 @@ export const getAllItems = async (): Promise<ICard[]> => {
     .then((res: any) => {
       return res.data.boards[0].items;
     });
+  
+  // Filter items by group
+  const filteredItems = rawItems.filter((i: any) => i.group.id === groupId);
 
-  const resData = Promise.all(
-    rawItems.map(async (item: any) => {
+  return formatItems(filteredItems);
+};
+
+export const getItemsByCategory = async (category: Categories, group: Groups): Promise<ICard[]> => {
+  const { data: { boardId } } = await fetchContext();
+  const categoryColumnId = await storageGetItem(Columns.Category);
+  const groupId = await storageGetItem(group);
+
+    const rawItems = await monday
+    .api(
+      `
+        query { 
+          items_by_column_values(board_id: ${boardId}, column_id: "${categoryColumnId}", column_value: "${category}"){
+            id
+            name
+            group {
+              id
+            }
+            created_at
+            creator { 
+              name 
+              phone
+              email
+              photo_tiny 
+            } 
+            column_values{ 
+              title 
+              text 
+              value
+              type
+          } 
+        }
+      }`
+    )
+    .then((res: any) => {
+      return res.data.items_by_column_values;
+    });
+
+  // Filter items by group
+  const filteredItems = rawItems.filter((i: any) => i.group.id === groupId);
+
+  return formatItems(filteredItems);
+}
+
+export const getMyItems = async (group?: Groups): Promise<ICard[]> => {
+  let filteredItems;
+  const { data: { boardId, user: { id: userId } } } = await fetchContext();
+  const [activeId, soldId] = await Promise.all([storageGetItem(Groups.Active), storageGetItem(Groups.Sold)]);
+  const groupIds = {
+    [`${Groups.Active}`]: activeId,
+    [`${Groups.Sold}`]: soldId
+  };
+
+  const rawItems = await monday
+    .api(
+      `
+        query { 
+          boards(ids: ${boardId}){
+            items  { 
+              id
+              name
+              group {
+                id
+              }
+              created_at
+              creator { 
+                id
+                name 
+                phone
+                email
+                photo_tiny 
+              } 
+            column_values{ 
+              title 
+              text 
+              value
+              type
+            } 
+          } 
+        }
+      }`
+    )
+    .then((res: any) => {
+      return res.data.boards[0].items;
+    });
+  
+  // Filter out items that do not belong to the user
+  const myItems = rawItems.filter((i: any) => i.creator.id === +userId);
+
+  // If no specific group was selected return all
+  if (!group) {
+    filteredItems = myItems.filter((i: any) => i.group.id === activeId || i.group.id === soldId);
+  } else filteredItems = myItems.filter((i: any) => i.group.id === groupIds[group]);
+
+  return formatItems(filteredItems);
+};
+
+export const deleteItem = async (itemId: number) => {
+  return monday.api(`mutation {
+    delete_item (item_id: ${itemId}) {
+        id
+    }
+  }`);
+};
+
+// Users
+const fetchInterested = async (userIds: number[]): Promise<{ display_name: string; profile_picture: string }[]> => {
+  const {
+    data: { users },
+  }: any = await monday.api(`query{
+      users(ids:[${userIds}]){
+        id
+        name
+        photo_tiny
+      }
+    }`);
+
+  return users.map((u: any) => ({ id: u.id, display_name: u.name, profile_picture: u.photo_tiny }));
+};
+
+// Wishlist
+export const addToWishlist = async (itemId: number) => {
+  const {
+    data: {
+      boardId,
+      user: { id: userId },
+    },
+  } = await fetchContext();
+  const {interested: interestedColumnId} = await columnIdsFromStorage([Columns.Interested]);
+  
+
+  const rawInterested = await monday
+    .api(
+      `query{
+      boards(ids:${boardId}){
+        items(ids:${itemId}){
+          column_values(ids:"${interestedColumnId}"){
+            value
+          }
+        }
+      }
+    }`
+    )
+    .then((res: any) => {
+      return res.data.boards[0].items[0].column_values;
+    });
+
+    // Create the interested users array
+  let interestedUsers;
+  if (rawInterested.length) {
+    const users = JSON.parse(rawInterested[0].value);
+    // Check if the user is already interested in this item
+    if (users.personsAndTeams.filter((u: {id: number, kind: string}) => u.id === +userId).length) return;
+    // If there are already interested people add to them
+    users.personsAndTeams.push({
+      id: +userId,
+      kind: "person",
+    });
+    interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams.map((p: any) => (`{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)).join(",")}]}`;
+  } else interestedUsers = `{\\\"personsAndTeams\\\":[{${formatMutation("id", +userId)},${formatMutation("kind", "person")}}]}`
+
+  return monday.api(
+    `mutation {
+        change_multiple_column_values(item_id:${itemId}, board_id:${boardId}, column_values:"{\\\"${interestedColumnId}\\\":${interestedUsers}}") {
+          id
+        }
+      }
+    `
+  );
+}; 
+
+export const getWishlist = async () => {
+  const {
+    data: {
+      user: { id: userId },
+    },
+  } = await fetchContext();
+  const items = await getItemsByGroup(Groups.Active);
+
+  return items.filter((item) => item.interested.filter(i => i.id === +userId).length);
+}
+
+const formatItems = (items: any[]): Promise<any[]> => {
+  return Promise.all(
+    items.map(async (item: any) => {
       let phone_number;
       let images;
       let description;
@@ -214,7 +423,9 @@ export const getAllItems = async (): Promise<ICard[]> => {
               if (c.value) {
                 const userIds = JSON.parse(c.value).personsAndTeams?.map((u: any) => u.id);
                 interested = await fetchInterested(userIds);
+                break;
               }
+              interested = [];
               break;
           }
         })
@@ -238,74 +449,14 @@ export const getAllItems = async (): Promise<ICard[]> => {
       };
     })
   );
+}
 
-  return resData;
-};
+const formatMutation = (key: string, value: string | number) => {
+  return `\\\"${key}\\\":\\\"${value}\\\"`;
+}
 
-export const deleteItem = async (itemId: number) => {
-  return monday.api(`mutation {
-    delete_item (item_id: ${itemId}) {
-        id
-    }
-  }`);
-};
-
-// Users
-const fetchInterested = async (userIds: number[]): Promise<{ display_name: string; profile_picture: string }[]> => {
-  const {
-    data: { users },
-  }: any = await monday.api(`query{
-      users(ids:[${userIds}]){
-        name
-        photo_tiny
-      }
-    }`);
-
-  return users.map((u: any) => ({ display_name: u.name, profile_picture: u.photo_tiny }));
-};
-
-//add item to user wishlist (add the user to item interested)
-export const addToWishList = async (itemId: number) => {
-  const {
-    data: {
-      boardId,
-      user: { id: userId },
-    },
-  } = await fetchContext();
-  const interestedId = await columnIdsFromStorage([Columns.Interested]);
-
-  const rawUsers = await monday
-    .api(
-      `query{
-      boards(ids:${boardId}){
-        items(ids:${itemId}){
-          column_values(ids:${interestedId}){
-            value
-          }
-        }
-      }
-    }`
-    )
-    .then((res: any) => {
-      return res.data.boards[0].items[0].column_values[0].value;
-    });
-  const users = JSON.parse(rawUsers);
-  const allUsers = JSON.stringify(
-    users.personsAndTeams.push({
-      id: userId,
-      kind: "person",
-    })
-  );
-
-  return monday.api(
-    `mutation {
-        change_multiple_column_values(item_id:${itemId}, board_id:${boardId}, column_values:"{\\\"${interestedId}\\\":{\\\"personsAndTeams\\\":${allUsers}}}") {
-          id
-        }
-      }
-    `
-  );
-};
+// Edit item
+// export const editItem = async(item_id: number,)
 
 // //edit item (name , description , phone number)
 // export const editItem = async (item_id, item) => {

@@ -1,8 +1,6 @@
 import * as React from "react";
-import Input from "../input/Input";
 import ImageUpload from "../image-upload/ImageUpload";
 import RadioCategory from "../radio/RadioCategory";
-import Checkbox from "../checkbox/CheckboxContact";
 import { Title, ModalContainer, ContainerTitle, Divider } from "./ModalInfoStyle";
 import { useState } from "react";
 import { Box, Button, InputLabel, TextField } from "@mui/material";
