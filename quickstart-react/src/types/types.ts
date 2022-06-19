@@ -4,10 +4,25 @@ export enum Groups {
 }
 
 export enum Columns {
+  Name = "name",
   Description = "description",
   Images = "images",
   Interested = "interested",
   Category = "category",
+}
+
+export enum Categories {
+  Electronics = "electronics",
+  Entertainment = "entertainment",
+  Clothing = "clothing",
+  Tools = "tools",
+  Musical_Instruments = "musical_instruments",
+  Home_And_Garden = "home_and_garden",
+  Office = "office",
+  Sports = "sports",
+  Hobbies = "hobbies",
+  Toys_And_Games = "toys_and_games",
+  Other = "other"
 }
 
 export interface IColumnValues {
@@ -20,7 +35,7 @@ export interface IColumnValues {
 export interface ICard {
   name: string;
   description: string;
-  category: string;
+  category: Categories;
   owner: IUser;
   images: string[];
   interested: IUser[];
@@ -30,7 +45,7 @@ export interface ICard {
 export interface RawItem {
   name: string;
   description: string;
-  category: string;
+  category: Categories;
   images: FileList;
   column_values?: IColumnValues[];
 }
@@ -38,6 +53,7 @@ export interface RawItem {
 export type ICardList = ICard[];
 
 export interface IUser {
+  id: number;
   display_name: string;
   profile_picture: string;
   phone?: string;

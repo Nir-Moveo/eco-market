@@ -10,10 +10,10 @@ import {
   fetchContext,
   fetchGroups,
   initializeGroups,
-  columnIdsFromStorage,
-  storageGetItem,
-  getAllItems,
-  addNewItem,
+  setGroupIdsToStorage,
+  setColumnIdsToStorage,
+  addToWishlist,
+  getWishlist
 } from "./services/monday.api";
 import { Columns, Groups } from "./types/types";
 
@@ -42,10 +42,13 @@ const App = () => {
       // Check if groups are initialized, if not - initialize
       const groups = await fetchGroups(boardId);
       if (!groupsExist(groups)) await initializeGroups(boardId);
-
+      // Set the groupIds in storage for easy access
+      await setGroupIdsToStorage(groups);
       // Check if columns are initialized, if not - initialize
       const columns = await fetchColumns(boardId);
       if (!columnsExist(columns)) await initializeColumns(boardId);
+      // Set the columnIds in storage for easy access
+      await setColumnIdsToStorage(columns);
     };
 
     initializeApp();
