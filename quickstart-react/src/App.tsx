@@ -11,9 +11,7 @@ import {
   fetchGroups,
   initializeGroups,
   setGroupIdsToStorage,
-  setColumnIdsToStorage,
-  addToWishlist,
-  getWishlist
+  setColumnIdsToStorage
 } from "./services/monday.api";
 import { Columns, Groups } from "./types/types";
 

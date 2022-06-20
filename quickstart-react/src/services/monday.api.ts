@@ -1,6 +1,8 @@
+import * as _ from "lodash";
 import mondaySdk from "monday-sdk-js";
 
 import { Categories, Columns, Groups, ICard, IColumnValues, RawItem } from "../types/types";
+import { formatMutation } from "../utils/utils";
 
 const monday = mondaySdk();
 
@@ -81,7 +83,7 @@ export const fetchGroups = async (boardId: number) => {
   return boards[0].groups.map((g: { id: string }) => g.id);
 };
 
-export const moveItemToGroup = async (itemId: number, groupName: string) => {
+export const moveItemToGroup = async (itemId: number, groupName: Groups) => {
   const groupId = await storageGetItem(groupName);
   return monday.api(`mutation {
     move_item_to_group (item_id: ${itemId}, group_id: "${groupId}") {
@@ -164,6 +166,47 @@ export const addNewItem = async (item: RawItem) => {
   if (item.images?.length) await addImagesToItem(itemId, columns[Columns.Images], item.images);
 };
 
+export const editItem = async (itemId: number, valuesToUpdate: { [Columns.Name]?: string, [Columns.Description]?: string, [Columns.Category]?: Categories }) => {
+  const { data: { boardId } } = await fetchContext();
+  const columnIds = await columnIdsFromStorage([Columns.Name, Columns.Description, Columns.Category]);
+
+  // Create the mutation to update the item
+  const columnValues = Object.entries(valuesToUpdate).map(([key, value]) => formatMutation(columnIds[key], value)).join(",");
+
+  const updatedItem = await monday.api(
+    `mutation {
+        change_multiple_column_values(item_id:${itemId}, board_id:${boardId}, column_values:"{${columnValues}}") {
+              id
+              name
+              created_at
+              creator { 
+                name 
+                phone
+                email
+                photo_tiny 
+              } 
+              column_values{ 
+                title 
+                text 
+                value
+                type
+              } 
+        }
+      }
+    `
+  ).then((res: any) => res.data.change_multiple_column_values);
+
+  return formatItems([updatedItem]);
+};
+
+export const deleteItem = async (itemId: number) => {
+  return monday.api(`mutation {
+    delete_item (item_id: ${itemId}) {
+        id
+    }
+  }`);
+};
+
 export const addImagesToItem = async (itemId: number, columnId: string, images: FileList) => {
   for (let i = 0; i < images.length; i++) {
     await monday.api(
@@ -224,7 +267,7 @@ export const getItemsByCategory = async (category: Categories, group: Groups): P
   const categoryColumnId = await storageGetItem(Columns.Category);
   const groupId = await storageGetItem(group);
 
-    const rawItems = await monday
+  const rawItems = await monday
     .api(
       `
         query { 
@@ -254,6 +297,48 @@ export const getItemsByCategory = async (category: Categories, group: Groups): P
       return res.data.items_by_column_values;
     });
 
+  // Filter items by group
+  const filteredItems = rawItems.filter((i: any) => i.group.id === groupId);
+
+  return formatItems(filteredItems);
+};
+
+export const getItemsByIds = async (itemIds: number[], group: Groups) => {
+  const { data: { boardId } } = await fetchContext();
+  const groupId = await storageGetItem(group);
+
+  const rawItems = await monday
+    .api(
+      `
+        query { 
+          boards(ids: ${boardId}){
+            items(ids: [${itemIds.join(",")}]) { 
+              id
+              name
+              group {
+                id
+              }
+              created_at
+              creator { 
+                name 
+                phone
+                email
+                photo_tiny 
+              } 
+            column_values{ 
+              title 
+              text 
+              value
+              type
+            } 
+          } 
+        }
+      }`
+    )
+    .then((res: any) => {
+      return res.data.boards[0].items;
+    });
+  
   // Filter items by group
   const filteredItems = rawItems.filter((i: any) => i.group.id === groupId);
 
@@ -313,12 +398,58 @@ export const getMyItems = async (group?: Groups): Promise<ICard[]> => {
   return formatItems(filteredItems);
 };
 
-export const deleteItem = async (itemId: number) => {
-  return monday.api(`mutation {
-    delete_item (item_id: ${itemId}) {
-        id
-    }
-  }`);
+const formatItems = async (items: any[]): Promise<any[]> => {
+  const data = await Promise.all(
+    items.map(async (item: any) => {
+      let phone_number;
+      let images;
+      let description;
+      let interested;
+      let category;
+
+      await Promise.all(
+        item.column_values?.map(async (c: IColumnValues) => {
+          switch (c.title) {
+            case Columns.Description:
+              description = c.text;
+              break;
+            case Columns.Images:
+              images = c.text.split(`, `);
+              break;
+            case Columns.Category:
+              category = c.text;
+              break;
+            case Columns.Interested:
+              if (c.value) {
+                const userIds = JSON.parse(c.value).personsAndTeams?.map((u: any) => u.id);
+                interested = await fetchInterested(userIds);
+                break;
+              }
+              interested = [];
+              break;
+          }
+        })
+      );
+
+      return {
+        id: item.id,
+        name: item.name,
+        description,
+        images,
+        category,
+        interested,
+        owner: {
+          display_name: item.creator?.name,
+          profile_picture: item.creator?.photo_tiny,
+          email: item.creator?.email,
+          phone: item.creator?.phone,
+        },
+        created_at: item.created_at,
+        phone_number,
+      };
+    })
+  );
+  return _.orderBy(data,["created_at"], ["desc"]);
 };
 
 // Users
@@ -387,6 +518,52 @@ export const addToWishlist = async (itemId: number) => {
   );
 }; 
 
+export const removeFromWishlist = async (itemId: number) => {
+  const {
+    data: {
+      boardId,
+      user: { id: userId },
+    },
+  } = await fetchContext();
+  const {interested: interestedColumnId} = await columnIdsFromStorage([Columns.Interested]);
+  
+
+  const rawInterested = await monday
+    .api(
+      `query{
+      boards(ids:${boardId}){
+        items(ids:${itemId}){
+          column_values(ids:"${interestedColumnId}"){
+            value
+          }
+        }
+      }
+    }`
+    )
+    .then((res: any) => {
+      return res.data.boards[0].items[0].column_values;
+    });
+
+    // Create the interested users array
+  let interestedUsers;
+  if (rawInterested.length) {
+    const users = JSON.parse(rawInterested[0].value);
+    // Check if the user is already interested in this item
+    users.personsAndTeams = users.personsAndTeams.filter((u: { id: number, kind: string }) => u.id !== +userId);
+    interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams.map((p: any) => (`{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)).join(",")}]}`;
+
+    return monday.api(
+      `mutation {
+        change_multiple_column_values(item_id:${itemId}, board_id:${boardId}, column_values:"{\\\"${interestedColumnId}\\\":${interestedUsers}}") {
+          id
+        }
+      }
+    `
+    );
+  }
+  return;
+}; 
+
 export const getWishlist = async () => {
   const {
     data: {
@@ -396,164 +573,4 @@ export const getWishlist = async () => {
   const items = await getItemsByGroup(Groups.Active);
 
   return items.filter((item) => item.interested.filter(i => i.id === +userId).length);
-}
-
-const formatItems = (items: any[]): Promise<any[]> => {
-  return Promise.all(
-    items.map(async (item: any) => {
-      let phone_number;
-      let images;
-      let description;
-      let interested;
-      let category;
-
-      await Promise.all(
-        item.column_values?.map(async (c: IColumnValues) => {
-          switch (c.title) {
-            case Columns.Description:
-              description = c.text;
-              break;
-            case Columns.Images:
-              images = c.text.split(`, `);
-              break;
-            case Columns.Category:
-              category = c.text;
-              break;
-            case Columns.Interested:
-              if (c.value) {
-                const userIds = JSON.parse(c.value).personsAndTeams?.map((u: any) => u.id);
-                interested = await fetchInterested(userIds);
-                break;
-              }
-              interested = [];
-              break;
-          }
-        })
-      );
-
-      return {
-        id: item.id,
-        name: item.name,
-        description,
-        images,
-        category,
-        interested,
-        owner: {
-          display_name: item.creator?.name,
-          profile_picture: item.creator?.photo_tiny,
-          email: item.creator?.email,
-          phone: item.creator?.phone,
-        },
-        created_at: item.created_at,
-        phone_number,
-      };
-    })
-  );
-}
-
-const formatMutation = (key: string, value: string | number) => {
-  return `\\\"${key}\\\":\\\"${value}\\\"`;
-}
-
-// Edit item
-// export const editItem = async(item_id: number,)
-
-// //edit item (name , description , phone number)
-// export const editItem = async (item_id, item) => {
-//   if (item.name) {
-//     monday.api(`mutation {
-//       change_simple_column_value(item_id:${item_id}, board_id:${
-//       storageGetItem("board_id")
-//     }, column_id:"name",value: ${item.name}) {
-//         id
-//       }
-//     }`);
-//   }
-//   if (item.description) {
-//     monday.api(`mutation {
-//       change_simple_column_value(item_id:${item_id}, board_id:${
-//       storageGetItem("board_id")
-//     }, column_id:${
-//       storageGetItem("description")
-//     },value: ${item.description}) {
-//         id
-//       }
-//     }`);
-//   }
-//   if (item.phone_number) {
-//     monday.api(`mutation {
-//       change_simple_column_value(item_id:${item_id}, board_id:${
-//       storageGetItem("board_id")
-//     }, column_id:${
-//       storageGetItem("phone_number")
-//     },value: ${item.phone_number}) {
-//         id
-//       }
-//     }`);
-//   }
-//   if (item.category) {
-//     monday.api(`mutation {
-//       change_simple_column_value(item_id:${item_id}, board_id:${
-//       storageGetItem("board_id")
-//     }, column_id:${
-//       storageGetItem("category")
-//     },value: ${item.category}) {
-//         id
-//       }
-//     }`);
-//   }
-// };
-
-// //delete all photos from item
-// export const removeAllPhotosFromItem = async (item_id) => {
-//   monday.api(
-//     `mutation {
-//        change_column_value (item_id: ${item_id}, column_id:${
-//       storageGetItem("images")
-//     }, board_id: board_id:${
-//       storageGetItem("board_id")
-//     }, value:"{\\"clear_all\\": true}") { id } }
-//   `
-//   );
-// };
-
-// //remove item from wishlist
-// export const removeFromWishList = async (item_id) => {
-//   const rawUsers = monday
-//     .api(
-//       `query{
-//       boards(ids:${storageGetItem("board_id")}){
-//         items(ids:${item_id}){
-//           column_values(ids:${
-//             storageGetItem("interested")
-//           }){
-//             value
-//           }
-//         }
-//     }
-//     }
-//   `
-//     )
-//     .then((res) => {
-//       return res.data.boards[0].items[0].column_values[0].value;
-//     });
-//   const users = JSON.parse(rawUsers);
-//   const leftUsers = _.filter(users.personsAndTeams, (res) => {
-//     if (res.id == storageGetItem("my_id"))
-//       return false;
-//     return true;
-//   });
-//   const allUsers = JSON.stringify(leftUsers);
-//   monday.api(
-//     `mutation {
-//         change_multiple_column_values(item_id:${item_id}, board_id:${
-//       storageGetItem("board_id")
-//     }, column_values: "{\"${
-//       storageGetItem("interested")
-//     }\" : {\"personsAndTeams\":${allUsers}}}") {
-//           id
-//         }
-//       }
-//     `
-//   );
-// };
+};
