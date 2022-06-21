@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const LoaderContainer = styled.div`
   position: relative;
-  height: 50%;
-  width: 50%;
+  height: 30%;
+  width: 30%;
 
   .circle-loader-spinner {
     animation: rotate 1s linear infinite;

@@ -27,7 +27,7 @@ const styleImg = {
   cursor: "pointer",
 };
 
-const ModalComponent: React.FC = (props) => {
+const ModalComponent = (props: { updateCards: () => void }): JSX.Element => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -56,7 +56,7 @@ const ModalComponent: React.FC = (props) => {
               height="12"
               width="12"
             />
-            <ModalInfo onClose={handleClose} />
+            <ModalInfo onClose={handleClose} updateCards={props.updateCards} />
           </Box>
         </Fade>
       </Modal>

@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import { Colors } from "../../colors";
 
-export const ModalWrapperContainer = styled.div`
+export const LoaderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: fit-content;
+  margin-top: 50%;
+  position: relative;
 `;
 export const ModalContainer = styled.div`
   .form-container {

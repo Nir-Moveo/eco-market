@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { getItemsByGroup } from "../../services/monday.api";
-import {  Groups, ICardList } from "../../types/types";
+import { Groups, ICardList } from "../../types/types";
 import CardList from "../cards/CardList";
 import Modal from "../modal/Modal";
 import { HomeBody, ContentDiv, TopLine, MainTitle, SubTitle } from "./homeStyle";
@@ -18,8 +18,6 @@ const Home: React.FC<HomeProps> = () => {
 
   async function getCards() {
     const tmpCards = await getItemsByGroup(Groups.Active);
-    console.log("tmpCards: ", tmpCards);
-
     setCards(tmpCards);
   }
   return (
@@ -29,7 +27,7 @@ const Home: React.FC<HomeProps> = () => {
           <MainTitle>Today's best items</MainTitle>
           <SubTitle>You can save 24 trees by trading 1 t-shirt today!</SubTitle>
         </div>
-        <Modal />
+        <Modal updateCards={getCards} />
       </TopLine>
       <ContentDiv>
         <CardList cards={cards}></CardList>
