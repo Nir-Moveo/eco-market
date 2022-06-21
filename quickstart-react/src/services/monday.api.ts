@@ -21,14 +21,16 @@ export const storageSetItem = async (key: string, value: any) => {
 };
 
 export const setColumnIdsToStorage = async (columnIds: string[]) => {
-  return Promise.all(columnIds.map(c => {
-    if (new RegExp(`^${Columns.Category}`).test(c)) return storageSetItem(Columns.Category, c);
-    else if (new RegExp(`^${Columns.Name}`).test(c)) return storageSetItem(Columns.Name, c);
-    else if (new RegExp(`^${Columns.Description}`).test(c)) return storageSetItem(Columns.Description, c);
-    else if (new RegExp(`^${Columns.Images}`).test(c)) return storageSetItem(Columns.Images, c);
-    else if (new RegExp(`^${Columns.Interested}`).test(c)) return storageSetItem(Columns.Interested, c);
-  }));
-}
+  return Promise.all(
+    columnIds.map((c) => {
+      if (new RegExp(`^${Columns.Category}`).test(c)) return storageSetItem(Columns.Category, c);
+      else if (new RegExp(`^${Columns.Name}`).test(c)) return storageSetItem(Columns.Name, c);
+      else if (new RegExp(`^${Columns.Description}`).test(c)) return storageSetItem(Columns.Description, c);
+      else if (new RegExp(`^${Columns.Images}`).test(c)) return storageSetItem(Columns.Images, c);
+      else if (new RegExp(`^${Columns.Interested}`).test(c)) return storageSetItem(Columns.Interested, c);
+    })
+  );
+};
 
 export const columnIdsFromStorage = async (columnNames: string[]) => {
   const ids = await Promise.all(
@@ -43,9 +45,9 @@ export const columnIdsFromStorage = async (columnNames: string[]) => {
 export const setGroupIdsToStorage = (groups: string[]) => {
   return Promise.all([
     storageSetItem(Groups.Active, groups.filter((g: string) => g.match(`^${Groups.Active}`))[0]),
-    storageSetItem(Groups.Sold, groups.filter((g: string) => g.match(`^${Groups.Sold}`))[0])
+    storageSetItem(Groups.Sold, groups.filter((g: string) => g.match(`^${Groups.Sold}`))[0]),
   ]);
-}
+};
 
 // Groups
 const createGroup = async (boardId: number, name: string) => {
@@ -166,15 +168,23 @@ export const addNewItem = async (item: RawItem) => {
   if (item.images?.length) await addImagesToItem(itemId, columns[Columns.Images], item.images);
 };
 
-export const editItem = async (itemId: number, valuesToUpdate: { [Columns.Name]?: string, [Columns.Description]?: string, [Columns.Category]?: Categories }) => {
-  const { data: { boardId } } = await fetchContext();
+export const editItem = async (
+  itemId: number,
+  valuesToUpdate: { [Columns.Name]?: string; [Columns.Description]?: string; [Columns.Category]?: Categories }
+) => {
+  const {
+    data: { boardId },
+  } = await fetchContext();
   const columnIds = await columnIdsFromStorage([Columns.Name, Columns.Description, Columns.Category]);
 
   // Create the mutation to update the item
-  const columnValues = Object.entries(valuesToUpdate).map(([key, value]) => formatMutation(columnIds[key], value)).join(",");
+  const columnValues = Object.entries(valuesToUpdate)
+    .map(([key, value]) => formatMutation(columnIds[key], value))
+    .join(",");
 
-  const updatedItem = await monday.api(
-    `mutation {
+  const updatedItem = await monday
+    .api(
+      `mutation {
         change_multiple_column_values(item_id:${itemId}, board_id:${boardId}, column_values:"{${columnValues}}") {
               id
               name
@@ -194,7 +204,8 @@ export const editItem = async (itemId: number, valuesToUpdate: { [Columns.Name]?
         }
       }
     `
-  ).then((res: any) => res.data.change_multiple_column_values);
+    )
+    .then((res: any) => res.data.change_multiple_column_values);
 
   return formatItems([updatedItem]);
 };
@@ -221,7 +232,9 @@ export const addImagesToItem = async (itemId: number, columnId: string, images: 
 };
 
 export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
-  const { data: { boardId } } = await fetchContext();
+  const {
+    data: { boardId },
+  } = await fetchContext();
   const groupId = await storageGetItem(group);
 
   const rawItems = await monday
@@ -255,7 +268,7 @@ export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
     .then((res: any) => {
       return res.data.boards[0].items;
     });
-  
+
   // Filter items by group
   const filteredItems = rawItems.filter((i: any) => i.group.id === groupId);
 
@@ -263,7 +276,9 @@ export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
 };
 
 export const getItemsByCategory = async (category: Categories, group: Groups): Promise<ICard[]> => {
-  const { data: { boardId } } = await fetchContext();
+  const {
+    data: { boardId },
+  } = await fetchContext();
   const categoryColumnId = await storageGetItem(Columns.Category);
   const groupId = await storageGetItem(group);
 
@@ -304,7 +319,9 @@ export const getItemsByCategory = async (category: Categories, group: Groups): P
 };
 
 export const getItemsByIds = async (itemIds: number[], group: Groups) => {
-  const { data: { boardId } } = await fetchContext();
+  const {
+    data: { boardId },
+  } = await fetchContext();
   const groupId = await storageGetItem(group);
 
   const rawItems = await monday
@@ -338,20 +355,25 @@ export const getItemsByIds = async (itemIds: number[], group: Groups) => {
     .then((res: any) => {
       return res.data.boards[0].items;
     });
-  
+
   // Filter items by group
   const filteredItems = rawItems.filter((i: any) => i.group.id === groupId);
 
   return formatItems(filteredItems);
-}
+};
 
 export const getMyItems = async (group?: Groups): Promise<ICard[]> => {
   let filteredItems;
-  const { data: { boardId, user: { id: userId } } } = await fetchContext();
+  const {
+    data: {
+      boardId,
+      user: { id: userId },
+    },
+  } = await fetchContext();
   const [activeId, soldId] = await Promise.all([storageGetItem(Groups.Active), storageGetItem(Groups.Sold)]);
   const groupIds = {
     [`${Groups.Active}`]: activeId,
-    [`${Groups.Sold}`]: soldId
+    [`${Groups.Sold}`]: soldId,
   };
 
   const rawItems = await monday
@@ -386,7 +408,7 @@ export const getMyItems = async (group?: Groups): Promise<ICard[]> => {
     .then((res: any) => {
       return res.data.boards[0].items;
     });
-  
+
   // Filter out items that do not belong to the user
   const myItems = rawItems.filter((i: any) => i.creator.id === +userId);
 
@@ -449,7 +471,7 @@ const formatItems = async (items: any[]): Promise<any[]> => {
       };
     })
   );
-  return _.orderBy(data,["created_at"], ["desc"]);
+  return _.orderBy(data, ["created_at"], ["desc"]);
 };
 
 // Users
@@ -475,8 +497,7 @@ export const addToWishlist = async (itemId: number) => {
       user: { id: userId },
     },
   } = await fetchContext();
-  const {interested: interestedColumnId} = await columnIdsFromStorage([Columns.Interested]);
-  
+  const { interested: interestedColumnId } = await columnIdsFromStorage([Columns.Interested]);
 
   const rawInterested = await monday
     .api(
@@ -494,19 +515,28 @@ export const addToWishlist = async (itemId: number) => {
       return res.data.boards[0].items[0].column_values;
     });
 
-    // Create the interested users array
+  // Create the interested users array
   let interestedUsers;
-  if (rawInterested.length) {
+  if (rawInterested.length && rawInterested[0].value) {
     const users = JSON.parse(rawInterested[0].value);
+
     // Check if the user is already interested in this item
-    if (users.personsAndTeams.filter((u: {id: number, kind: string}) => u.id === +userId).length) return;
+    users.personsAndTeams = users.personsAndTeams.filter((u: { id: number; kind: string }) => u.id !== +userId);
+
+    // if (users.personsAndTeams.filter((u: { id: number; kind: string }) => u.id === +userId).length) return;
     // If there are already interested people add to them
     users.personsAndTeams.push({
       id: +userId,
       kind: "person",
     });
-    interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams.map((p: any) => (`{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)).join(",")}]}`;
-  } else interestedUsers = `{\\\"personsAndTeams\\\":[{${formatMutation("id", +userId)},${formatMutation("kind", "person")}}]}`
+    interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams
+      .map((p: any) => `{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)
+      .join(",")}]}`;
+  } else
+    interestedUsers = `{\\\"personsAndTeams\\\":[{${formatMutation("id", +userId)},${formatMutation(
+      "kind",
+      "person"
+    )}}]}`;
 
   return monday.api(
     `mutation {
@@ -516,7 +546,7 @@ export const addToWishlist = async (itemId: number) => {
       }
     `
   );
-}; 
+};
 
 export const removeFromWishlist = async (itemId: number) => {
   const {
@@ -525,8 +555,7 @@ export const removeFromWishlist = async (itemId: number) => {
       user: { id: userId },
     },
   } = await fetchContext();
-  const {interested: interestedColumnId} = await columnIdsFromStorage([Columns.Interested]);
-  
+  const { interested: interestedColumnId } = await columnIdsFromStorage([Columns.Interested]);
 
   const rawInterested = await monday
     .api(
@@ -544,13 +573,15 @@ export const removeFromWishlist = async (itemId: number) => {
       return res.data.boards[0].items[0].column_values;
     });
 
-    // Create the interested users array
+  // Create the interested users array
   let interestedUsers;
   if (rawInterested.length) {
     const users = JSON.parse(rawInterested[0].value);
     // Check if the user is already interested in this item
-    users.personsAndTeams = users.personsAndTeams.filter((u: { id: number, kind: string }) => u.id !== +userId);
-    interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams.map((p: any) => (`{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)).join(",")}]}`;
+    users.personsAndTeams = users.personsAndTeams.filter((u: { id: number; kind: string }) => u.id !== +userId);
+    interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams
+      .map((p: any) => `{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)
+      .join(",")}]}`;
 
     return monday.api(
       `mutation {
@@ -562,7 +593,7 @@ export const removeFromWishlist = async (itemId: number) => {
     );
   }
   return;
-}; 
+};
 
 export const getWishlist = async () => {
   const {
@@ -572,5 +603,5 @@ export const getWishlist = async () => {
   } = await fetchContext();
   const items = await getItemsByGroup(Groups.Active);
 
-  return items.filter((item) => item.interested.filter(i => i.id === +userId).length);
+  return items.filter((item) => item.interested.filter((i) => i.id === +userId).length);
 };

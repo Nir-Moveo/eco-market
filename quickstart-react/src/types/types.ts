@@ -33,6 +33,7 @@ export interface IColumnValues {
 }
 
 export interface ICard {
+  id: number;
   name: string;
   description: string;
   category: Categories;
