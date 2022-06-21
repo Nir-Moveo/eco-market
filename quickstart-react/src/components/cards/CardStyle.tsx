@@ -67,6 +67,7 @@ export const InfoContainer = styled.div`
 `;
 
 export const CardContainer = styled.div`
+  position: relative;
   height: 430px;
   width: 228px;
   background: ${Colors.GREY};

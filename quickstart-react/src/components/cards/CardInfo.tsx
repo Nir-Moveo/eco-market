@@ -74,7 +74,7 @@ const CardInfo = (props: ICard) => {
           {renderInterestedAvatars()}
         </AvatarGroup>
         {interested?.length > 0 && (
-          <span className="interested-text">{interested?.length > 1 ? "Are" : "Is" + " intrested!"}</span>
+          <span className="interested-text">{(interested?.length > 1 ? "Are" : "Is") + " intrested!"}</span>
         )}
       </div>
     </InfoContainer>
