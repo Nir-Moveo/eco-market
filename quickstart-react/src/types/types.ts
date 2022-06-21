@@ -22,7 +22,7 @@ export enum Categories {
   Sports = "sports",
   Hobbies = "hobbies",
   Toys_And_Games = "toys_and_games",
-  Other = "other"
+  Other = "other",
 }
 
 export interface IColumnValues {
@@ -46,7 +46,7 @@ export interface RawItem {
   name: string;
   description: string;
   category: Categories;
-  images: FileList;
+  images?: FileList;
   column_values?: IColumnValues[];
 }
 

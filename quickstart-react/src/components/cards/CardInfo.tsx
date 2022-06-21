@@ -25,11 +25,11 @@ const CardInfo = (props: ICard) => {
   };
 
   const renderInterestedAvatars = () => {
-    return interested?.map((user) => {
+    return interested?.map((user, key) => {
       const userName = user.display_name;
       const profilePicture = user.profile_picture;
       return (
-        <Tooltip title={userName}>
+        <Tooltip title={userName} key={`${userName}-${key}`}>
           <Avatar
             src={profilePicture}
             style={{
@@ -73,7 +73,9 @@ const CardInfo = (props: ICard) => {
         <AvatarGroup className="avatar-group" max={4}>
           {renderInterestedAvatars()}
         </AvatarGroup>
-        {interested?.length > 0 && <span className="interested-text">Are intrested!</span>}
+        {interested?.length > 0 && (
+          <span className="interested-text">{interested?.length > 1 ? "Are" : "Is" + " intrested!"}</span>
+        )}
       </div>
     </InfoContainer>
   );

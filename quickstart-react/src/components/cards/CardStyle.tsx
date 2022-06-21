@@ -40,6 +40,9 @@ export const Description = styled.p`
 
 export const InfoContainer = styled.div`
   margin: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 216px;
   @media screen and (max-width: 480px) {
     width: auto;
     white-space: pre-wrap;
@@ -91,6 +94,7 @@ export const CardContainer = styled.div`
     display: flex;
     justify-content: end;
     align-items: center;
+    margin-top: auto;
   }
   @media (max-width: 480px) {
     flex-direction: column;
