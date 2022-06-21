@@ -7,11 +7,13 @@ import CardList from "../cards/CardList";
 import Modal from "../modal/Modal";
 import { HomeBody, ContentDiv, TopLine, MainTitle, SubTitle } from "./homeStyle";
 
-interface HomeProps {}
+interface HomeProps {
+  cards: ICardList;
+  setCards(cards: ICardList): void;
+}
 
-const Home: React.FC<HomeProps> = () => {
-  const [cards, setCards] = useState<ICardList>([]);
-
+const Home: React.FC<HomeProps> = (props: HomeProps) => {
+  const { cards, setCards } = props;
   useEffect(() => {
     getCards();
   }, []);
