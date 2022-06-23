@@ -146,6 +146,7 @@ export const Slide = styled.div`
     height: 100%;
     object-fit: cover;
     overflow: hidden;
+    border-radius: 10px;
   }
   /* Fading animation */
   &.fade {
@@ -170,7 +171,7 @@ export const Slide = styled.div`
 export const CardListContainer = styled.div`
   display: flex;
   flex-flow: wrap;
-  width:100%;
-  justify-content:space-between;
+  width: 100%;
+  justify-content: space-between;
   gap: 24px;
 `;
