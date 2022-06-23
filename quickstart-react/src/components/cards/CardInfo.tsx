@@ -69,12 +69,12 @@ const CardInfo = (props: ICard) => {
         </Tooltip>
       </div>
 
-      <div className="intrested-container">
+      <div className="interested-container">
         <AvatarGroup className="avatar-group" max={4}>
           {renderInterestedAvatars()}
         </AvatarGroup>
         {interested?.length > 0 && (
-          <span className="interested-text">{(interested?.length > 1 ? "Are" : "Is") + " intrested!"}</span>
+          <span className="interested-text">{(interested?.length > 1 ? "Are" : "Is") + " interested!"}</span>
         )}
       </div>
     </InfoContainer>
