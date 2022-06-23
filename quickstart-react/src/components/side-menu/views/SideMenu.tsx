@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { getItemsByCategory } from "../../../services/monday.api";
+import { getItemsByCategory, getItemsByGroup } from "../../../services/monday.api";
 import { Categories, Groups, ICardList } from "../../../types/types";
 import MenuItem from "../components/MenuItem";
 import { SideBar, SideTitle, BottomBar } from "./SideMenuStyle";
@@ -13,7 +13,6 @@ interface SideMenuProps {
 const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
   const { cards, setCards } = props;
 
-  // const categoryList = [{itemName: "All", itemIcon: "All"},{itemName: "Clothing", itemIcon: "Clothing"},{itemName: "Electricity", itemIcon: "Electricity"},{itemName: "Furniture", itemIcon: "Furniture"}];
   const categoryList = Object.keys(Categories);
   const subCategoryList = [
     { itemName: "Wishlist", itemIcon: "Wishlist" },
@@ -21,7 +20,11 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
   ];
 
   const selectCategory = async (category: Categories) => {
-    const newCards = await getItemsByCategory(category, Groups.Active);
+    const newCards =
+      (category as String) === "All"
+        ? await getItemsByGroup(Groups.Active)
+        : await getItemsByCategory(category, Groups.Active);
+
     setCards(newCards);
   };
   return (

@@ -12,6 +12,7 @@ export enum Columns {
 }
 
 export enum Categories {
+  All = "all",
   Electronics = "electronics",
   Entertainment = "entertainment",
   Clothing = "clothing",
