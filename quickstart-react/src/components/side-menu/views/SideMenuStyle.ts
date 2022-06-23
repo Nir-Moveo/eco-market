@@ -1,5 +1,29 @@
 import styled from "styled-components";
 import { Colors } from "../../../styles/Colors";
+import { MenuItemProps } from "./SideMenu";
+
+export const SideContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  height: 100vh;
+`;
+
+export const MenuItemDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  border-radius: 8px;
+  align-items: center;
+  height: fit-content;
+  cursor: pointer;
+  width: 100%; 
+  &:hover {
+    background-color: ${Colors.sideBarHover};
+  }
+  background-color: ${(props:MenuItemProps) => props.isSelected ? Colors.sideBarHover : ''};
+`;
 
 export const SideBar = styled.div`
   display: flex;
@@ -11,7 +35,8 @@ export const SideBar = styled.div`
   width: 240px;
   height: 100%;
   background-color: ${Colors.sideBarBg};
-  margin: 0 32px 32px 32px;
+  margin: 0 32px 0px 32px;
+  padding-bottom: 32px;
 `;
 
 export const BottomBar = styled.div`
