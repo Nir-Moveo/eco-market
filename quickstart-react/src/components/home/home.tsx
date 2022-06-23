@@ -22,6 +22,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
     const tmpCards = await getItemsByGroup(Groups.Active);
     setCards(tmpCards);
   }
+
   return (
     <HomeBody>
       <TopLine>

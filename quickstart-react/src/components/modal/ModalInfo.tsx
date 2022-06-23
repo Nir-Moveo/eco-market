@@ -31,6 +31,7 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
 
     await addNewItem(payload);
     await props.updateCards();
+    
     props.onClose();
     setIsLoading(false);
   };

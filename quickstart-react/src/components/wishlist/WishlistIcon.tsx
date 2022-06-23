@@ -30,7 +30,7 @@ const WishlistIcon = (props: IWishlist) => {
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
-    // if the user already intrested in the item
+    // if the user already interested in the item
     const userIncludedInIntrested = Boolean(
       _.find(item.interested, (user) => {
         return user.id.toString() === userId;

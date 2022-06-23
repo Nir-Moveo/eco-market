@@ -91,7 +91,7 @@ export const CardContainer = styled.div`
     color: ${Colors.DARK_GREEN};
     font-size: 12px;
   }
-  .intrested-container {
+  .interested-container {
     display: flex;
     justify-content: end;
     align-items: center;
