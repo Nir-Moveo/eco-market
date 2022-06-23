@@ -31,15 +31,11 @@ const ImagesCarousel = ({ images }: { images: string[] | undefined }): JSX.Eleme
     <SlideShow>
       {renderImages()}
       {isMultipleSlides() && (
-        <>
-          <a className="prev" onClick={() => plusSlides(-1)}>
-            &#10094;
-          </a>
+        <div className="arrows-container">
+          <img className="prev" src={require("../../assets/prev-icon.svg")} onClick={() => plusSlides(-1)}></img>
 
-          <a className="next" onClick={() => plusSlides(1)}>
-            &#10095;
-          </a>
-        </>
+          <img className="next" src={require("../../assets/next-icon.svg")} onClick={() => plusSlides(1)}></img>
+        </div>
       )}
     </SlideShow>
   );

@@ -11,7 +11,7 @@ export const Title = styled.span`
 export const Image = styled.img`
   width: clamp(100px, 20%, 600px);
   border-radius: 20px 0 0 20px;
-  object-fit: cover;
+  /* object-fit: cover; */
 
   @media screen and (max-width: 480px) {
     width: auto;
@@ -110,23 +110,28 @@ export const SlideShow = styled.div`
   /* Next & previous buttons */
   .prev,
   .next {
+    border-radius: 200px;
+    background: rgba(0, 0, 0, 0.1);
     cursor: pointer;
     position: absolute;
     top: 50%;
     width: auto;
-    margin-top: -22px;
-    padding: 16px;
+    padding: 7px 9px 7px 6px;
+    margin: 2px;
     color: white;
     font-weight: 100;
     font-size: 18px;
     transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
     user-select: none;
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
   }
+
   /* Position the "next button" to the right */
   .next {
     right: 0;
-    border-radius: 3px 0 0 3px;
+    padding: 7px 6px 7px 9px;
   }
   .image-placeholder {
     width: 100%;
@@ -144,7 +149,7 @@ export const Slide = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* object-fit: cover; */
     overflow: hidden;
     border-radius: 10px;
   }
