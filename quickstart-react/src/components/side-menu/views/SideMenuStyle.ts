@@ -33,7 +33,7 @@ export const SideBar = styled.div`
   align-content: flex-start;
   border-radius: 8px;
   width: 240px;
-  height: 100%;
+  /* height: 100%; */
   background-color: ${Colors.sideBarBg};
   margin: 0 32px 0px 32px;
   padding-bottom: 32px;
