@@ -69,7 +69,7 @@ export const InfoContainer = styled.div`
 export const CardContainer = styled.div`
   position: relative;
   height: 430px;
-  width: 228px;
+  width: 288px;
   background: ${Colors.GREY};
   border: 1px solid ${Colors.GREEN};
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
@@ -170,4 +170,6 @@ export const Slide = styled.div`
 export const CardListContainer = styled.div`
   display: flex;
   flex-flow: wrap;
+  width:100%;
+  justify-content:space-between;
 `;
