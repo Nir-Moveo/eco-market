@@ -76,8 +76,8 @@ export const CardContainer = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  margin: 0 24px 24px 0;
-  overflow: auto;
+  /* margin: 0 24px 24px 0; */
+  /* overflow: auto; */
   .avatar-group > .MuiAvatar-root,
   .avatar {
     height: 28px;
@@ -172,4 +172,5 @@ export const CardListContainer = styled.div`
   flex-flow: wrap;
   width:100%;
   justify-content:space-between;
+  gap: 24px;
 `;
