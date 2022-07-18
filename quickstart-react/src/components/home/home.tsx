@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { getItemsByGroup } from "../../services/monday.api";
-import { Groups, ICardList } from "../../types/types";
+import { getItemsByGroup, storageGetItem } from "../../services/monday.api";
+import { Context, Groups, ICardList } from "../../types/types";
 import CardList from "../cards/CardList";
 import Modal from "../modal/Modal";
 import { HomeBody, ContentDiv, TopLine, MainTitle, SubTitle } from "./homeStyle";
@@ -14,8 +14,14 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = (props: HomeProps) => {
   const { cards, setCards } = props;
+  const [userId, setUserId] = useState<number>(0);
   useEffect(() => {
+    const getUserId = async () => {
+      const userId = await storageGetItem(Context.UserID);
+      setUserId(userId);
+    }
     getCards();
+    getUserId();
   }, []);
 
   async function getCards() {
@@ -33,7 +39,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
         <Modal updateCards={getCards} />
       </TopLine>
       <ContentDiv>
-        <CardList cards={cards}></CardList>
+        <CardList cards={cards} userId={userId}></CardList>
       </ContentDiv>
     </HomeBody>
   );

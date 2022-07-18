@@ -7,8 +7,13 @@ import WishlistIcon from "../wishlist/WishlistIcon";
 import _ from "lodash";
 import { getItemsByIds } from "../../services/monday.api";
 
-const Card: React.FC<ICard> = (props: ICard) => {
-  const [newProps, setNewProps] = useState(props);
+interface CardProps {
+  userId: number;
+  card: ICard;
+}
+
+const Card: React.FC<CardProps> = ({userId, card}: CardProps) => {
+  const [newProps, setNewProps] = useState<ICard>(card);
 
   //re-render card data if wishlist changed
   const getCardInfo = async (itemId: number) => {
@@ -20,7 +25,7 @@ const Card: React.FC<ICard> = (props: ICard) => {
     <CardContainer>
       <ImagesCarousel images={newProps.images} />
       <CardInfo {...newProps} />
-      <WishlistIcon item={newProps} getCardInfo={(itemId) => getCardInfo(itemId)} />
+      <WishlistIcon item={newProps} userId={userId} getCardInfo={(itemId) => getCardInfo(itemId)} />
     </CardContainer>
   );
 };
