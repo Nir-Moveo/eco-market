@@ -102,6 +102,24 @@ export const CardContainer = styled.div`
     margin: 0 0 5% 0;
   }
 `;
+export const PersonalCardContainer = styled.div`
+  position: relative;
+  height: 122px;
+  background: ${Colors.GREY};
+  border: 1px solid ${Colors.GREEN};
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+  display: flex;
+  margin-bottom: 24px;
+  overflow: hidden;
+
+  .left-container {
+    display: flex;
+  }
+  .right-container {
+    display: flex;
+  }
+`;
 
 export const SlideShow = styled.div`
   height: 200px;
@@ -178,5 +196,10 @@ export const CardListContainer = styled.div`
   flex-flow: wrap;
   width: 100%;
   justify-content: space-between;
+  gap: 24px;
+`;
+export const PersonalCardListContainer = styled.div`
+  flex-flow: wrap;
+  width: 100%;
   gap: 24px;
 `;

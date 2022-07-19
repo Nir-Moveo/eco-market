@@ -2,6 +2,11 @@ export enum Groups {
   Active = "active_items",
   Sold = "sold_items",
 }
+export enum Buttons {
+  Primary = "primary",
+  Secondary = "secondary",
+  Delete = "delete",
+}
 
 export enum Columns {
   Name = "name",
@@ -43,7 +48,7 @@ export interface ICard {
   owner: IUser;
   images: string[];
   interested: IUser[];
-  published_at?: string;
+  created_at?: string;
 }
 
 export interface RawItem {
