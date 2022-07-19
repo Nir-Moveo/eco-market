@@ -57,16 +57,23 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
       <Header />
       <SideBar>
         <SideTitle>Menu</SideTitle>
-        {categoryList.map((category, index) => (
-          <MenuItemDiv
-            className="menu-item-container"
-            key={`menu-item-${index}`}
-            onClick={() => selectCategory(category as Categories)}
-            isSelected={selectedCategory === category}
-          >
-            <MenuItem key={index} itemName={category} itemIcon={category} />
-          </MenuItemDiv>
-        ))}
+        {categoryList.map((category, index) => {
+          const lowerCatName = category.toLowerCase();
+          return (
+            <MenuItemDiv
+              className="menu-item-container"
+              key={`menu-item-${index}`}
+              onClick={() => selectCategory(category as Categories)}
+              isSelected={selectedCategory === category}
+            >
+              <MenuItem
+                key={index}
+                itemName={category}
+                itemIcon={lowerCatName}
+              />
+            </MenuItemDiv>
+          );
+        })}
 
         <MenuItemDiv
           className="menu-item-container"
@@ -74,7 +81,7 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
           onClick={goToPersonalPage}
           isSelected={selectedCategory === "personalPage"}
         >
-          <MenuItem itemName="Personal Page" itemIcon="personal-page" />
+          <MenuItem itemName="Personal Page" itemIcon="Personal" />
         </MenuItemDiv>
       </SideBar>
     </SideContainer>
