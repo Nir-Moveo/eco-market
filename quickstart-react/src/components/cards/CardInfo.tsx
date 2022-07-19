@@ -1,15 +1,16 @@
 import { Title, Description, Date, InfoContainer } from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
-import React, { useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { ICard } from "../../types/types";
 
 import Tooltip from "@mui/material/Tooltip";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { colorsArr } from "../../colors";
 import { CustomBanner } from "./Banner";
+import moment from "moment";
 
 const CardInfo = (props: ICard) => {
-  const { name, description, owner, interested, published_at } = props;
+  const { name, description, owner, interested, created_at } = props;
   const [showHover, setShowHover] = useState(false);
 
   const randomColor = (name: string) => {
@@ -63,7 +64,7 @@ const CardInfo = (props: ICard) => {
       </div>
       <div className="item-info-container">
         <Title>{name}</Title>
-        <Date>{published_at}</Date>
+        <Date>{moment(created_at).format("LLL")}</Date>
         <Tooltip title={description}>
           <Description>{description}</Description>
         </Tooltip>

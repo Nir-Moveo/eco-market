@@ -45,6 +45,7 @@ const App = () => {
       if (!groupsExist(groups)) await initializeGroups(boardId);
       // Set the groupIds in storage for easy access
       await setGroupIdsToStorage(groups);
+
       // Check if columns are initialized, if not - initialize
       const columns = await fetchColumns(boardId);
       if (!columnsExist(columns)) await initializeColumns(boardId);

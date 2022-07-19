@@ -8,19 +8,21 @@ import Header from "../../header/Header";
 export interface SideMenuProps {
   cards: ICardList;
   setCards(cards: ICardList): void;
+  setIsPersonalPage(newState: boolean): void;
 }
 export interface MenuItemProps {
   isSelected: boolean;
 }
 
 const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
-  const { cards, setCards } = props;
+  const { cards, setCards, setIsPersonalPage } = props;
 
   const categoryList = Object.keys(Categories);
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const selectCategory = async (category: Categories) => {
+    setIsPersonalPage(false);
     const newCards =
       (category as String) === "All"
         ? await getItemsByGroup(Groups.Active)
@@ -28,6 +30,11 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
 
     setCards(newCards);
     setSelectedCategory(category);
+  };
+
+  const goToPersonalPage = () => {
+    setIsPersonalPage(true);
+    setSelectedCategory("personalPage");
   };
   return (
     <SideContainer>
@@ -44,6 +51,15 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
             <MenuItem key={index} itemName={category} itemIcon={category} />
           </MenuItemDiv>
         ))}
+
+        <MenuItemDiv
+          className="menu-item-container"
+          key="menu-item-personal"
+          onClick={goToPersonalPage}
+          isSelected={selectedCategory === "personalPage"}
+        >
+          <MenuItem itemName="Personal Page" itemIcon="personal-page" />
+        </MenuItemDiv>
       </SideBar>
     </SideContainer>
   );
