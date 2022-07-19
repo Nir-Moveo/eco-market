@@ -9,15 +9,23 @@ interface MainFrameProps {}
 
 const MainFrame: React.FC<MainFrameProps> = () => {
   const [cards, setCards] = React.useState<ICardList>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [isPersonalPage, setIsPersonalPage] = React.useState(false);
   return (
     <GeneralDiv>
       <MainContainer>
-        <SideMenu cards={cards} setCards={setCards} setIsPersonalPage={setIsPersonalPage} />
+        <SideMenu
+          setCards={setCards}
+          setIsPersonalPage={setIsPersonalPage}
+          setIsLoading={setIsLoading}
+        />
         {isPersonalPage ? (
-          <PersonalPage cards={cards} setCards={setCards}></PersonalPage>
+          <PersonalPage
+            cards={cards}
+            setCards={setCards}
+          ></PersonalPage>
         ) : (
-          <Home cards={cards} setCards={setCards} />
+          <Home cards={cards} setCards={setCards} isLoading={isLoading} setIsLoading={setIsLoading} />
         )}
       </MainContainer>
     </GeneralDiv>

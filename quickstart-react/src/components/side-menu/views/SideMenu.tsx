@@ -1,35 +1,45 @@
 import * as React from "react";
 import { useState } from "react";
-import { getItemsByCategory, getItemsByGroup } from "../../../services/monday.api";
+import {
+  getItemsByCategory,
+  getItemsByGroup,
+} from "../../../services/monday.api";
 import { Categories, Groups, ICardList } from "../../../types/types";
 import MenuItem from "../components/MenuItem";
-import { SideBar, SideTitle, SideContainer, MenuItemDiv } from "./SideMenuStyle";
+import {
+  SideBar,
+  SideTitle,
+  SideContainer,
+  MenuItemDiv,
+} from "./SideMenuStyle";
 import Header from "../../header/Header";
 export interface SideMenuProps {
-  cards: ICardList;
   setCards(cards: ICardList): void;
   setIsPersonalPage(newState: boolean): void;
+  setIsLoading(isLoading: boolean): void;
 }
 export interface MenuItemProps {
   isSelected: boolean;
 }
 
 const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
-  const { cards, setCards, setIsPersonalPage } = props;
+  const { setCards, setIsPersonalPage, setIsLoading } = props;
 
   const categoryList = Object.keys(Categories);
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const selectCategory = async (category: Categories) => {
+    setIsLoading(true);
     setIsPersonalPage(false);
     const newCards =
       (category as String) === "All"
         ? await getItemsByGroup(Groups.Active)
         : await getItemsByCategory(category, Groups.Active);
-
+    console.log(newCards, "cards");
     setCards(newCards);
     setSelectedCategory(category);
+    setIsLoading(false);
   };
 
   const goToPersonalPage = () => {

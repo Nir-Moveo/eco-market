@@ -1,25 +1,34 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { getItemsByGroup} from "../../services/monday.api";
+import { getItemsByGroup } from "../../services/monday.api";
 import { Groups, ICardList } from "../../types/types";
 import CardList from "../cards/CardList";
 import Modal from "../modal/Modal";
-import { HomeBody, ContentDiv, TopLine, MainTitle, SubTitle } from "./homeStyle";
+import {
+  HomeBody,
+  ContentDiv,
+  TopLine,
+  MainTitle,
+  SubTitle,
+} from "./homeStyle";
 
 interface HomeProps {
   cards: ICardList;
+  isLoading: boolean;
   setCards(cards: ICardList): void;
+  setIsLoading(isLoading: boolean): void;
 }
 
 const Home: React.FC<HomeProps> = (props: HomeProps) => {
-  const { cards, setCards } = props;
+  const { cards, setCards, isLoading, setIsLoading } = props;
   useEffect(() => {
     getCards();
-  }, [getCards]);
+  }, []);
 
   async function getCards() {
     const tmpCards = await getItemsByGroup(Groups.Active);
     setCards(tmpCards);
+    setIsLoading(false);
   }
 
   return (
@@ -32,7 +41,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
         <Modal updateCards={getCards} />
       </TopLine>
       <ContentDiv>
-        <CardList cards={cards}></CardList>
+        <CardList cards={cards} isLoading={isLoading}></CardList>
       </ContentDiv>
     </HomeBody>
   );

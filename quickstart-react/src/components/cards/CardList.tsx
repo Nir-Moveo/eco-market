@@ -5,18 +5,18 @@ import { ICardList } from "../../types/types";
 import Card from "./Card";
 import { CardListContainer } from "./CardStyle";
 import Placeholder from "../placeholder/Placeholder";
+export interface CardListProps {
+  isLoading: boolean;
+  cards: ICardList
+}
 
-const CardList = ({ cards }: { cards: ICardList }) => {
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    if (cards.length > 0) {
-      setIsLoading(false)
-    }
-  }, [cards]);
+const CardList = ( props: CardListProps ) => {
+  const {isLoading, cards} = props;
 
   const renderCards = (cards: ICardList) => {
-    return cards.map((card, key: number) => <Card key={card.id} {...card}></Card>);
+    return cards.map((card, key: number) => (
+      <Card key={card.id} {...card}></Card>
+    ));
   };
   const ListSkeleton = ({ listsToRender = 0 }) => {
     return (
@@ -25,23 +25,34 @@ const CardList = ({ cards }: { cards: ICardList }) => {
           .fill(1)
           .map((card, index) => (
             <Skeleton
+              key={index}
               sx={{ bgcolor: Colors.GREY }}
               variant="rectangular"
               width={288}
               height={430}
-            />))}
+            />
+          ))}
       </>
     );
   };
-  if (isLoading) {
-    return <CardListContainer><ListSkeleton listsToRender={8} /></CardListContainer>;
-  }
-  if (!(cards.length > 0)) {
-    return <Placeholder title="No items were found..."
-      subTitle="Try looking for a different item"></Placeholder>
-  } else {
-    return <CardListContainer>{renderCards(cards)}</CardListContainer>;
-  }
+  return (
+    <div>
+      {isLoading && (
+        <CardListContainer>
+          <ListSkeleton listsToRender={8} />
+        </CardListContainer>
+      )}
+      {!(cards.length > 0) && !isLoading && (
+        <Placeholder
+          title="No items were found..."
+          subTitle="Try looking for a different item"
+        ></Placeholder>
+      )}
+      {cards.length > 0 && !isLoading && (
+        <CardListContainer>{renderCards(cards)}</CardListContainer>
+      )}
+    </div>
+  );
 };
 
 export default CardList;
