@@ -3,8 +3,9 @@ import { useState } from "react";
 import {
   getItemsByCategory,
   getItemsByGroup,
+  getWishlist,
 } from "../../../services/monday.api";
-import { Categories, Groups, ICardList } from "../../../types/types";
+import { Categories, Groups, ICard, ICardList } from "../../../types/types";
 import MenuItem from "../components/MenuItem";
 import {
   SideBar,
@@ -32,12 +33,17 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
   const selectCategory = async (category: Categories) => {
     setIsLoading(true);
     setIsPersonalPage(false);
-    const newCards =
-      (category as String) === "All"
-        ? await getItemsByGroup(Groups.Active)
-        : await getItemsByCategory(category, Groups.Active);
-    console.log(newCards, "cards");
-    setCards(newCards);
+    let newCards: ICard[] | null = null;
+    if ((category as String) === "All") {
+      newCards = await getItemsByGroup(Groups.Active);
+      setCards(newCards);
+    } else if ((category as String) === "Wishlist") {
+      newCards = await getWishlist();
+      setCards(newCards);
+    } else {
+      newCards = await getItemsByCategory(category, Groups.Active);
+      setCards(newCards);
+    }
     setSelectedCategory(category);
     setIsLoading(false);
   };

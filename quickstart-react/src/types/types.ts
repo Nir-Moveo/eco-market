@@ -34,8 +34,7 @@ export enum Categories {
   Hobbies = "hobbies",
   Toys_And_Games = "toys_and_games",
   Other = "other",
-  // Wishlist= "wishlist",
-  // Personal_Page="personal_page"
+  Wishlist= "wishlist"
 }
 
 export interface IColumnValues {
