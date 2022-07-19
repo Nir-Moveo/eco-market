@@ -56,6 +56,9 @@ export const Title = styled.span`
   color: ${Colors.PRIMARY_BLACK};
   margin-top: 12px;
   margin-bottom: 22px;
+  &.personal {
+    font-size: 1.5rem;
+  }
 `;
 export const ContainerTitle = styled.span`
   margin-top: 12px;

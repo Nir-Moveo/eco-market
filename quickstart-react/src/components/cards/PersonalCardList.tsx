@@ -1,5 +1,5 @@
 import React from "react";
-import { CardListContainer, PersonalCardListContainer } from "./CardStyle";
+import { PersonalCardListContainer } from "./CardStyle";
 import { Groups, ICardList } from "../../types/types";
 import PersonalCard from "./PersonalCard";
 

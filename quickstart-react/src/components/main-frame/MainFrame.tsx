@@ -14,11 +14,7 @@ const MainFrame: React.FC<MainFrameProps> = () => {
     <GeneralDiv>
       <MainContainer>
         <SideMenu cards={cards} setCards={setCards} setIsPersonalPage={setIsPersonalPage} />
-        {isPersonalPage ? (
-          <PersonalPage cards={cards} setCards={setCards}></PersonalPage>
-        ) : (
-          <Home cards={cards} setCards={setCards} />
-        )}
+        {isPersonalPage ? <PersonalPage></PersonalPage> : <Home cards={cards} setCards={setCards} />}
       </MainContainer>
     </GeneralDiv>
   );
