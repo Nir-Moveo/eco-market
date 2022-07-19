@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ItemTitle } from "./MenuItemStyle";
+import { ItemTitle,ItemIcon } from "./MenuItemStyle";
 interface MenuItemProps {
   itemName: string;
   itemIcon: string;
@@ -12,6 +12,13 @@ const MenuItem: React.FC<MenuItemProps> = ({ itemName, itemIcon }) => {
   return (
     <>
       {/* <ItemIcon src={require("../assets/" + `${itemIcon}` + ".svg")} /> */}
+      {/* <ItemIcon
+src={require("../assets/" + `${itemIcon}` + ".svg")}
+onError={({ currentTarget }) => {
+currentTarget.onerror = null;
+currentTarget.src = require("../assets/" + `${'exit'}` + ".svg");
+}}
+/> */}
       <ItemTitle>{formatName(itemName)}</ItemTitle>
     </>
   );
