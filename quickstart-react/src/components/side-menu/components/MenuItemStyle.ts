@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Colors } from "../../../styles/Colors";
 
 export const ItemIcon = styled.img`
     height:30px;

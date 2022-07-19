@@ -4,11 +4,11 @@ import CardInfo from "./CardInfo";
 import ImagesCarousel from "./ImagesCarousel";
 import { Groups, ICard } from "../../types/types";
 import WishlistIcon from "../wishlist/WishlistIcon";
-import _ from "lodash";
 import { getItemsByIds } from "../../services/monday.api";
 
+
 const Card: React.FC<ICard> = (props: ICard) => {
-  const [newProps, setNewProps] = useState(props);
+  const [newProps, setNewProps] = useState<ICard>(props);
 
   //re-render card data if wishlist changed
   const getCardInfo = async (itemId: number) => {

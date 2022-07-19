@@ -8,6 +8,11 @@ export enum Buttons {
   Delete = "delete",
 }
 
+export enum Context {
+  BoardID = "boardId",
+  UserID = "userId"
+}
+
 export enum Columns {
   Name = "name",
   Description = "description",

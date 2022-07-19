@@ -1,7 +1,6 @@
 import * as React from "react";
-import { useState } from "react";
 import { useEffect } from "react";
-import { getItemsByGroup } from "../../services/monday.api";
+import { getItemsByGroup} from "../../services/monday.api";
 import { Groups, ICardList } from "../../types/types";
 import CardList from "../cards/CardList";
 import Modal from "../modal/Modal";
@@ -16,7 +15,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
   const { cards, setCards } = props;
   useEffect(() => {
     getCards();
-  }, []);
+  }, [getCards]);
 
   async function getCards() {
     const tmpCards = await getItemsByGroup(Groups.Active);

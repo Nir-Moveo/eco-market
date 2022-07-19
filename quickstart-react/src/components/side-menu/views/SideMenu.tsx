@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Component, useState } from "react";
+import { useState } from "react";
 import { getItemsByCategory, getItemsByGroup } from "../../../services/monday.api";
 import { Categories, Groups, ICardList } from "../../../types/types";
 import MenuItem from "../components/MenuItem";
-import { SideBar, SideTitle, BottomBar, SideContainer, MenuItemDiv } from "./SideMenuStyle";
+import { SideBar, SideTitle, SideContainer, MenuItemDiv } from "./SideMenuStyle";
 import Header from "../../header/Header";
 export interface SideMenuProps {
   cards: ICardList;
