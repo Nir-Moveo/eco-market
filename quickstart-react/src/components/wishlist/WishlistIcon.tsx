@@ -1,20 +1,28 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { addToWishlist, createNotification, fetchContext, fetchInterested, removeFromWishlist, storageGetItem } from "../../services/monday.api";
-import { Context, ICard, IUser } from "../../types/types";
+import { addToWishlist, createNotification, fetchInterested, removeFromWishlist, storageGetItem } from "../../services/monday.api";
+import { Context, ICard } from "../../types/types";
 import { formatNewInterestedNotification } from "../../utils/utils";
 import Loader from "../loader/Loader";
 import { WishlistIconContainer } from "./WishlistStyle";
 
 interface IWishlist {
   item: ICard;
-  userId: number;
   getCardInfo: (itemId: number) => void;
 }
 
-const WishlistIcon = ({item, userId, getCardInfo}: IWishlist) => {
+const WishlistIcon = ({item, getCardInfo}: IWishlist) => {
   const [isIntrested, setIsIntrested] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const [userId, setUserId] = useState<number>(0);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const userId = await storageGetItem(Context.UserID);
+      setUserId(+userId)
+    };
+    getUserId();
+  },[])
 
   const newInterestedNotification = async () => {
     const user = await fetchInterested([userId]);
@@ -62,7 +70,7 @@ const WishlistIcon = ({item, userId, getCardInfo}: IWishlist) => {
       {isLoading ? (
         <Loader></Loader>
       ) : (
-        <img src={require(`../../assets/${isIntrested ? "full" : "empty"}-heart.svg`)} />
+        <img alt="heart" src={require(`../../assets/${isIntrested ? "full" : "empty"}-heart.svg`)} />
       )}
     </WishlistIconContainer>
   );

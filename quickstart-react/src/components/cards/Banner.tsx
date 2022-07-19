@@ -7,6 +7,7 @@ export const CustomBanner = (creator: IUser) => {
     <BannerContainer>
       <div className="banner">
         <img
+          alt="creator"
           src={
             creator && creator.profile_picture
               ? creator.profile_picture

@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CardContainer } from "./CardStyle";
 import CardInfo from "./CardInfo";
 import ImagesCarousel from "./ImagesCarousel";
-import { Columns, Groups, ICard, IUser } from "../../types/types";
+import { Groups, ICard } from "../../types/types";
 import WishlistIcon from "../wishlist/WishlistIcon";
-import _ from "lodash";
 import { getItemsByIds } from "../../services/monday.api";
 
-interface CardProps {
-  userId: number;
-  card: ICard;
-}
 
-const Card: React.FC<CardProps> = ({userId, card}: CardProps) => {
-  const [newProps, setNewProps] = useState<ICard>(card);
+const Card: React.FC<ICard> = (props: ICard) => {
+  const [newProps, setNewProps] = useState<ICard>(props);
 
   //re-render card data if wishlist changed
   const getCardInfo = async (itemId: number) => {
@@ -25,7 +20,7 @@ const Card: React.FC<CardProps> = ({userId, card}: CardProps) => {
     <CardContainer>
       <ImagesCarousel images={newProps.images} />
       <CardInfo {...newProps} />
-      <WishlistIcon item={newProps} userId={userId} getCardInfo={(itemId) => getCardInfo(itemId)} />
+      <WishlistIcon item={newProps} getCardInfo={(itemId) => getCardInfo(itemId)} />
     </CardContainer>
   );
 };
