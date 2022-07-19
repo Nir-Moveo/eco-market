@@ -586,10 +586,10 @@ export const getWishlist = async () => {
 };
 
 // Notifications
-export const createNotification = async (userId: number, board_id: number, text: string) => {
+export const createNotification = async (userId: number, boardId: number, text: string) => {
   return monday.api(
     `mutation{
-      create_notification(user_id:${userId}, target_id:${board_id},text: "${text}", target_type: Project){
+      create_notification(user_id:${userId}, target_id:${boardId},text: "${text}", target_type: Project){
         text
       }
     }`

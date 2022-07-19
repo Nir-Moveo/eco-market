@@ -27,7 +27,7 @@ const WishlistIcon = ({item, getCardInfo}: IWishlist) => {
   const newInterestedNotification = async () => {
     const user = await fetchInterested([userId]);
     const boardId = await storageGetItem(Context.BoardID);
-      await createNotification(item.owner.id, boardId, formatNewInterestedNotification(user[0].display_name, item.name));
+    await createNotification(item.owner.id, boardId, formatNewInterestedNotification(user[0].display_name, item.name));
     }
 
   useEffect(() => {
