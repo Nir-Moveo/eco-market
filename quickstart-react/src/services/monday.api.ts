@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import mondaySdk from "monday-sdk-js";
 
-import { Categories, Columns, Groups, ICard, IColumnValues, RawItem } from "../types/types";
+import { Categories, Columns, Context, Groups, ICard, IColumnValues, RawItem } from "../types/types";
 import { formatMutation } from "../utils/utils";
 
 const monday = mondaySdk();
@@ -141,9 +141,7 @@ export const fetchColumns = async (boardId: number) => {
 
 // Items
 export const addNewItem = async (item: RawItem) => {
-  const {
-    data: { boardId },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
   const columns = await columnIdsFromStorage([Columns.Description, Columns.Category, Columns.Images]);
   const groupId = await storageGetItem(Groups.Active);
 
@@ -172,9 +170,7 @@ export const editItem = async (
   itemId: number,
   valuesToUpdate: { [Columns.Name]?: string; [Columns.Description]?: string; [Columns.Category]?: Categories }
 ) => {
-  const {
-    data: { boardId },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
   const columnIds = await columnIdsFromStorage([Columns.Name, Columns.Description, Columns.Category]);
 
   // Create the mutation to update the item
@@ -189,7 +185,8 @@ export const editItem = async (
               id
               name
               created_at
-              creator { 
+              creator {
+                id
                 name 
                 phone
                 email
@@ -232,9 +229,7 @@ export const addImagesToItem = async (itemId: number, columnId: string, images: 
 };
 
 export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
-  const {
-    data: { boardId },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
   const groupId = await storageGetItem(group);
 
   const rawItems = await monday
@@ -249,7 +244,8 @@ export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
                 id
               }
               created_at
-              creator { 
+              creator {
+                id
                 name 
                 phone
                 email
@@ -276,9 +272,7 @@ export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
 };
 
 export const getItemsByCategory = async (category: Categories, group: Groups): Promise<ICard[]> => {
-  const {
-    data: { boardId },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
   const categoryColumnId = await storageGetItem(Columns.Category);
   const groupId = await storageGetItem(group);
 
@@ -294,6 +288,7 @@ export const getItemsByCategory = async (category: Categories, group: Groups): P
             }
             created_at
             creator { 
+              id
               name 
               phone
               email
@@ -319,9 +314,7 @@ export const getItemsByCategory = async (category: Categories, group: Groups): P
 };
 
 export const getItemsByIds = async (itemIds: number[], group: Groups) => {
-  const {
-    data: { boardId },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
   const groupId = await storageGetItem(group);
 
   const rawItems = await monday
@@ -337,6 +330,7 @@ export const getItemsByIds = async (itemIds: number[], group: Groups) => {
               }
               created_at
               creator { 
+                id
                 name 
                 phone
                 email
@@ -364,12 +358,8 @@ export const getItemsByIds = async (itemIds: number[], group: Groups) => {
 
 export const getMyItems = async (group?: Groups): Promise<ICard[]> => {
   let filteredItems;
-  const {
-    data: {
-      boardId,
-      user: { id: userId },
-    },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
+  const userId = await storageGetItem(Context.UserID);
   const [activeId, soldId] = await Promise.all([storageGetItem(Groups.Active), storageGetItem(Groups.Sold)]);
   const groupIds = {
     [`${Groups.Active}`]: activeId,
@@ -461,6 +451,7 @@ const formatItems = async (items: any[]): Promise<any[]> => {
         category,
         interested,
         owner: {
+          id: item.creator?.id,
           display_name: item.creator?.name,
           profile_picture: item.creator?.photo_tiny,
           email: item.creator?.email,
@@ -475,7 +466,7 @@ const formatItems = async (items: any[]): Promise<any[]> => {
 };
 
 // Users
-const fetchInterested = async (userIds: number[]): Promise<{ display_name: string; profile_picture: string }[]> => {
+export const fetchInterested = async (userIds: number[]): Promise<{ display_name: string; profile_picture: string }[]> => {
   const {
     data: { users },
   }: any = await monday.api(`query{
@@ -491,12 +482,8 @@ const fetchInterested = async (userIds: number[]): Promise<{ display_name: strin
 
 // Wishlist
 export const addToWishlist = async (itemId: number) => {
-  const {
-    data: {
-      boardId,
-      user: { id: userId },
-    },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
+  const userId = await storageGetItem(Context.UserID);
   const { interested: interestedColumnId } = await columnIdsFromStorage([Columns.Interested]);
 
   const rawInterested = await monday
@@ -549,12 +536,8 @@ export const addToWishlist = async (itemId: number) => {
 };
 
 export const removeFromWishlist = async (itemId: number) => {
-  const {
-    data: {
-      boardId,
-      user: { id: userId },
-    },
-  } = await fetchContext();
+  const boardId = await storageGetItem(Context.BoardID);
+  const userId = await storageGetItem(Context.UserID);
   const { interested: interestedColumnId } = await columnIdsFromStorage([Columns.Interested]);
 
   const rawInterested = await monday
@@ -596,12 +579,19 @@ export const removeFromWishlist = async (itemId: number) => {
 };
 
 export const getWishlist = async () => {
-  const {
-    data: {
-      user: { id: userId },
-    },
-  } = await fetchContext();
+  const userId = await storageGetItem(Context.UserID);
   const items = await getItemsByGroup(Groups.Active);
 
   return items.filter((item) => item.interested.filter((i) => i.id === +userId).length);
 };
+
+// Notifications
+export const createNotification = async (userId: number, boardId: number, text: string) => {
+  return monday.api(
+    `mutation{
+      create_notification(user_id:${userId}, target_id:${boardId},text: "${text}", target_type: Project){
+        text
+      }
+    }`
+  )
+}

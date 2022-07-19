@@ -3,7 +3,7 @@ import { ICardList } from "../../types/types";
 import Card from "./Card";
 import { CardListContainer } from "./CardStyle";
 
-const CardList = ({ cards }: { cards: ICardList }) => {
+const CardList = ({ cards }: { cards: ICardList}) => {
   useEffect(() => {}, [cards]);
 
   const renderCards = (cards: ICardList) => {

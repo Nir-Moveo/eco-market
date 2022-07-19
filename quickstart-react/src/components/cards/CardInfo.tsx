@@ -1,6 +1,6 @@
-import { Title, Image, Description, Date, InfoContainer } from "./CardStyle";
+import { Title, Description, Date, InfoContainer } from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { ICard } from "../../types/types";
 
 import Tooltip from "@mui/material/Tooltip";

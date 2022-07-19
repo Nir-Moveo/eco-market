@@ -3,6 +3,11 @@ export enum Groups {
   Sold = "sold_items",
 }
 
+export enum Context {
+  BoardID = "boardId",
+  UserID = "userId"
+}
+
 export enum Columns {
   Name = "name",
   Description = "description",

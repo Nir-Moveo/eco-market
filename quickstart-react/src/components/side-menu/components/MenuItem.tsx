@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Component } from "react";
-import { ItemIcon, ItemTitle } from "./MenuItemStyle";
+import { ItemTitle } from "./MenuItemStyle";
 interface MenuItemProps {
   itemName: string;
   itemIcon: string;

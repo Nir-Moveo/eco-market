@@ -11,9 +11,10 @@ import {
   fetchGroups,
   initializeGroups,
   setGroupIdsToStorage,
-  setColumnIdsToStorage
+  setColumnIdsToStorage,
+  storageSetItem
 } from "./services/monday.api";
-import { Columns, Groups } from "./types/types";
+import { Columns, Context, Groups } from "./types/types";
 
 const groupsExist = (groups: string[]) => {
   const regex = new RegExp(`^${Groups.Active}|^${Groups.Sold}`);
@@ -36,7 +37,9 @@ const App = () => {
   useEffect(() => {
     const initializeApp = async () => {
       // Fetch board id
-      const { boardId } = await getContext();
+      const { boardId, user: { id: userId } } = await getContext();
+      await storageSetItem(Context.BoardID, boardId);
+      await storageSetItem(Context.UserID, userId);
       // Check if groups are initialized, if not - initialize
       const groups = await fetchGroups(boardId);
       if (!groupsExist(groups)) await initializeGroups(boardId);
