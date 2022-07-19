@@ -228,6 +228,47 @@ export const addImagesToItem = async (itemId: number, columnId: string, images: 
   }
 };
 
+export const deleteImageFromItem = async (itemId: number, imageUrl: string) => {
+  const boardId = await storageGetItem(Context.BoardID);
+  const { images: imagesColumnId } = await columnIdsFromStorage([Columns.Images]);
+  // Query the relevant item to get the images value
+  const rawFiles = await monday
+    .api(
+      `
+        query { 
+          boards(ids: ${boardId}){
+            items(ids: [${itemId}]) { 
+            column_values{ 
+              title 
+              value
+            } 
+          } 
+        }
+      }`
+    )
+    .then((res: any) => {
+      // Syphon only the value from the response
+      return res.data.boards[0].items[0].column_values.filter((c: any) => c.title === Columns.Images)[0].value;
+    });
+    // Parse string to objects
+  let files = JSON.parse(rawFiles);
+  // get the relevant imageId from the image url
+  const imageId = +imageUrl.split("/").slice(-2)[0];
+  // use the id to filter out the files that need to be deleted
+  files.files = files.files.filter((f: { assetId: number }) => f.assetId != imageId);
+  // format the value for the files to be mutated
+  files = JSON.stringify(files).replace(/"/g, '\\"');
+
+
+  return monday.api(
+    `mutation {
+      change_multiple_column_values(item_id: ${itemId}, board_id: ${boardId}, column_values:"{\\\"${imagesColumnId}\\\":${files}}"){
+        id
+      }
+    }`
+  )
+}
+
 export const getItemsByGroup = async (group: Groups): Promise<ICard[]> => {
   const boardId = await storageGetItem(Context.BoardID);
   const groupId = await storageGetItem(group);
@@ -516,6 +557,7 @@ export const addToWishlist = async (itemId: number) => {
       id: +userId,
       kind: "person",
     });
+
     interestedUsers = `{\\\"personsAndTeams\\\":[${users.personsAndTeams
       .map((p: any) => `{${formatMutation("id", p.id)},${formatMutation("kind", "person")}}`)
       .join(",")}]}`;
