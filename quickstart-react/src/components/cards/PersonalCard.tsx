@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { PersonalCardContainer } from "./CardStyle";
 import CardInfo from "./CardInfo";
 import ImagesCarousel from "./ImagesCarousel";
-import { Buttons, Groups, ICard, ICardList } from "../../types/types";
+import { Buttons, Context, Groups, ICard, ICardList } from "../../types/types";
 import WishlistIcon from "../wishlist/WishlistIcon";
 import _ from "lodash";
-import { getItemsByIds } from "../../services/monday.api";
+import { createNotification, getItemsByIds, storageGetItem } from "../../services/monday.api";
 import Button from "../buttons/Button";
 import PersonalCardInfo from "./PersonalCardInfo";
 import EditModal from "../modal/EditModal";
 import Popup from "../popup/Popup";
+import {
+  formatItemActivateNotification,
+  formatItemSoldNotification,
+  formatNewInterestedNotification,
+} from "../../utils/utils";
 
 interface IPersonalCard {
   card: ICard;
@@ -29,6 +34,19 @@ const PersonalCard = (props: IPersonalCard) => {
     setNewCard(cards[0]);
   };
 
+  const notifyGivenItem = () => {
+    card.interested.map(async (user) => {
+      const boardId = await storageGetItem(Context.BoardID);
+      await createNotification(user.id, boardId, formatItemSoldNotification(card.name));
+    });
+  };
+  const notifyActivateItem = () => {
+    card.interested.map(async (user) => {
+      const boardId = await storageGetItem(Context.BoardID);
+      await createNotification(user.id, boardId, formatItemActivateNotification(card.name));
+    });
+  };
+
   const onEditClickHandler = () => {
     setShowEdit(true);
   };
@@ -36,15 +54,18 @@ const PersonalCard = (props: IPersonalCard) => {
   const onDeleteClickHandler = () => {
     setShowPopup(true);
     setPopupType("delete");
+    notifyGivenItem();
   };
 
   const onGivenClickHandler = () => {
     setShowPopup(true);
     setPopupType("given");
+    notifyGivenItem();
   };
   const onActivateClickHandler = () => {
     setShowPopup(true);
     setPopupType("activate");
+    notifyActivateItem();
   };
   const renderActiveCardSettings = () => {
     return (

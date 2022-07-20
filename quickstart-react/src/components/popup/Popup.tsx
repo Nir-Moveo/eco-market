@@ -1,12 +1,12 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Groups, ICard } from "../../types/types";
+import { Buttons, Groups, ICard } from "../../types/types";
 import { deleteItem, moveItemToGroup } from "../../services/monday.api";
+import Button from "../buttons/Button";
 
 interface IPopup {
   // updateCards: () => void,
@@ -87,23 +87,11 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
   const renderActionButton = () => {
     switch (status) {
       case "delete":
-        return (
-          <Button onClick={handleDelete} autoFocus>
-            Delete
-          </Button>
-        );
+        return <Button clickHandler={handleDelete} type={Buttons.Delete} title="Delete" />;
       case "given":
-        return (
-          <Button onClick={handleGiven} autoFocus>
-            Given
-          </Button>
-        );
+        return <Button clickHandler={handleGiven} type={Buttons.Primary} title="Given item" />;
       case "activate":
-        return (
-          <Button onClick={handleActivate} autoFocus>
-            Activate
-          </Button>
-        );
+        return <Button clickHandler={handleActivate} type={Buttons.Primary} title="Activate item" />;
       default:
         return;
     }
@@ -125,7 +113,7 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
           <DialogContentText id="alert-dialog-description">{getSubTitle()}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button clickHandler={handleClose} type={Buttons.Secondary} title="Cancel" />
           {renderActionButton()}
         </DialogActions>
       </Dialog>

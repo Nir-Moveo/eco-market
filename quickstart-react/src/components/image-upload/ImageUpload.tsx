@@ -29,19 +29,23 @@ const ImageUpload = ({ setItemImages, item, updateCard }: any) => {
   };
 
   const renderImages = (images: string[]) => {
-    return images.map((item, key: number) => (
-      <ItemListContainer>
-        <img height="140" className="marketImg" key={item} src={`${item}`}></img>{" "}
-        <img
-          onClick={() => handleImageDelete(key)}
-          style={styleImg}
-          src={require("../../assets/trash.svg")}
-          height="26"
-          width="26"
-          key={Math.random()}
-        />
-      </ItemListContainer>
-    ));
+    return images.map((item, key: number) =>
+      item.length ? (
+        <ItemListContainer>
+          <img height="140" className="marketImg" key={item} src={`${item}`}></img>
+          <img
+            onClick={() => handleImageDelete(key)}
+            style={styleImg}
+            src={require("../../assets/trash.svg")}
+            height="26"
+            width="26"
+            key={Math.random()}
+          />
+        </ItemListContainer>
+      ) : (
+        <></>
+      )
+    );
   };
 
   const fileToDataURL = (file: Blob) => {
