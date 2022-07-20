@@ -1,6 +1,12 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { addToWishlist, createNotification, fetchInterested, removeFromWishlist, storageGetItem } from "../../services/monday.api";
+import {
+  addToWishlist,
+  createNotification,
+  fetchInterested,
+  removeFromWishlist,
+  storageGetItem,
+} from "../../services/monday.api";
 import { Context, ICard } from "../../types/types";
 import { formatNewInterestedNotification } from "../../utils/utils";
 import Loader from "../loader/Loader";
@@ -11,44 +17,44 @@ interface IWishlist {
   getCardInfo: (itemId: number) => void;
 }
 
-const WishlistIcon = ({item, getCardInfo}: IWishlist) => {
-  const [isIntrested, setIsIntrested] = useState(false);
+const WishlistIcon = ({ item, getCardInfo }: IWishlist) => {
+  const [isInterested, setIsInterested] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [userId, setUserId] = useState<number>(0);
 
   useEffect(() => {
     const getUserId = async () => {
       const userId = await storageGetItem(Context.UserID);
-      setUserId(+userId)
+      setUserId(+userId);
     };
     getUserId();
-  },[])
+  }, []);
 
   const newInterestedNotification = async () => {
     const user = await fetchInterested([userId]);
     const boardId = await storageGetItem(Context.BoardID);
     await createNotification(item.owner.id, boardId, formatNewInterestedNotification(user[0].display_name, item.name));
-    }
+  };
 
   useEffect(() => {
     // if the user already interested in the item
-    const userIncludedInIntrested = Boolean(
+    const userIncludedInInterested = Boolean(
       _.find(item.interested, (user) => {
         return user.id === userId;
       })
     );
 
-    setIsIntrested(userIncludedInIntrested);
+    setIsInterested(userIncludedInInterested);
   }, [userId, item.interested]);
 
   const clickLandler = () => {
     setisLoading(true);
 
     //remove user from wishlist
-    if (isIntrested) {
+    if (isInterested) {
       removeFromWishlist(item.id)
         .then((res) => {
-          setIsIntrested(false);
+          setIsInterested(false);
           getCardInfo(item.id);
           setisLoading(false);
         })
@@ -57,9 +63,9 @@ const WishlistIcon = ({item, getCardInfo}: IWishlist) => {
     } else
       addToWishlist(item.id)
         .then((res) => {
-          setIsIntrested(true);
+          setIsInterested(true);
           getCardInfo(item.id);
-          newInterestedNotification()
+          newInterestedNotification();
           setisLoading(false);
         })
         .catch((err) => console.log(err));
@@ -70,7 +76,7 @@ const WishlistIcon = ({item, getCardInfo}: IWishlist) => {
       {isLoading ? (
         <Loader></Loader>
       ) : (
-        <img alt="heart" src={require(`../../assets/${isIntrested ? "full" : "empty"}-heart.svg`)} />
+        <img alt="heart" src={require(`../../assets/${isInterested ? "full" : "empty"}-heart.svg`)} />
       )}
     </WishlistIconContainer>
   );

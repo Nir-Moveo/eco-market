@@ -13,7 +13,6 @@ export const PlaceholderContainer = styled.div`
   }
 `;
 export const PlaceholderParagraph = styled.div`
-    font-family: "Mulish";
-    margin-top: 23px;
-    text-align: center;
+  margin-top: 23px;
+  text-align: center;
 `;
