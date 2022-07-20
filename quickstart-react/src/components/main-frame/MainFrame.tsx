@@ -14,16 +14,9 @@ const MainFrame: React.FC<MainFrameProps> = () => {
   return (
     <GeneralDiv>
       <MainContainer>
-        <SideMenu
-          setCards={setCards}
-          setIsPersonalPage={setIsPersonalPage}
-          setIsLoading={setIsLoading}
-        />
+        <SideMenu setCards={setCards} setIsPersonalPage={setIsPersonalPage} setIsLoading={setIsLoading} />
         {isPersonalPage ? (
-          <PersonalPage
-            cards={cards}
-            setCards={setCards}
-          ></PersonalPage>
+          <PersonalPage></PersonalPage>
         ) : (
           <Home cards={cards} setCards={setCards} isLoading={isLoading} setIsLoading={setIsLoading} />
         )}

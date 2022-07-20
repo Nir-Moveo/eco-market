@@ -7,6 +7,24 @@ export const Title = styled.span`
   font-size: 1.125rem;
   color: ${Colors.PRIMARY_BLACK};
 `;
+export const Category = styled.span`
+  margin-left: 16px;
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: ${Colors.PRIMARY_BLACK};
+`;
+export const PersonalTitle = styled.span`
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+  color: ${Colors.PRIMARY_BLACK};
+`;
+export const PersonalCategory = styled.span`
+  margin-left: 16px;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: ${Colors.PRIMARY_BLACK};
+`;
 
 export const Image = styled.img`
   width: clamp(100px, 20%, 600px);
@@ -36,6 +54,9 @@ export const Description = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 3; /* number of lines to show */
   -webkit-box-orient: vertical;
+  &.personal {
+    -webkit-line-clamp: 2; /* number of lines to show */
+  }
 `;
 
 export const InfoContainer = styled.div`
@@ -43,6 +64,9 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 216px;
+  &.personal {
+    height: auto;
+  }
   @media screen and (max-width: 480px) {
     width: auto;
     white-space: pre-wrap;
@@ -63,6 +87,27 @@ export const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 8px;
+    .top-container,
+    .bottom-container {
+      display: flex;
+      align-content: center;
+      .vartical-line {
+        height: 20px;
+        width: 1px;
+        margin: 0 16px;
+        background: ${Colors.SECONDARY_GREY};
+      }
+    }
+    .bottom-container {
+      font-weight: 400;
+      font-size: 14px;
+      color: ${Colors.PRIMARY_BLACK};
+      .interested {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
   }
 `;
 
@@ -72,7 +117,7 @@ export const CardContainer = styled.div`
   width: 288px;
   background: ${Colors.GREY};
   border: 1px solid ${Colors.GREEN};
-  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
+  /* box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07); */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -104,12 +149,13 @@ export const CardContainer = styled.div`
 `;
 export const PersonalCardContainer = styled.div`
   position: relative;
-  height: 122px;
-  background: ${Colors.GREY};
-  border: 1px solid ${Colors.GREEN};
-  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
+  height: 150px;
+  background: ${Colors.WHITE};
+  border: 1px solid ${Colors.SECONDARY_GREY};
+  /* box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07); */
   border-radius: 10px;
   display: flex;
+  justify-content: space-between;
   margin-bottom: 24px;
   overflow: hidden;
 
@@ -118,6 +164,11 @@ export const PersonalCardContainer = styled.div`
   }
   .right-container {
     display: flex;
+    .settings {
+      display: flex;
+      gap: 8px;
+      margin: 16px;
+    }
   }
 `;
 
@@ -157,6 +208,15 @@ export const SlideShow = styled.div`
     object-fit: cover;
     overflow: hidden;
   }
+  &.personal {
+    height: 150px;
+    width: 200px;
+    flex-shrink: 0;
+    .prev,
+    .next {
+      top: 40%;
+    }
+  }
 `;
 
 export const Slide = styled.div`
@@ -167,7 +227,6 @@ export const Slide = styled.div`
   img {
     width: 100%;
     height: 100%;
-    /* object-fit: cover; */
     overflow: hidden;
     border-radius: 10px;
   }
@@ -175,6 +234,13 @@ export const Slide = styled.div`
   &.fade {
     animation-name: fade;
     animation-duration: 1.5s;
+  }
+  &.personal {
+    height: 150px;
+    width: 100%;
+    img {
+      border-radius: 0;
+    }
   }
 
   &.hide {
@@ -202,4 +268,6 @@ export const PersonalCardListContainer = styled.div`
   flex-flow: wrap;
   width: 100%;
   gap: 24px;
+  max-height: 100vh;
+  overflow-y: auto;
 `;

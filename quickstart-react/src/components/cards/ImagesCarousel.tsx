@@ -2,13 +2,18 @@ import React from "react";
 import { SlideShow, Slide } from "./CardStyle";
 import { useState } from "react";
 
-const ImagesCarousel = ({ images }: { images: string[] | undefined }): JSX.Element => {
+interface ICarousel {
+  images: string[] | undefined;
+  className?: string;
+}
+const ImagesCarousel = (props: ICarousel): JSX.Element => {
+  const { images, className } = props;
   const [slideIndex, setSlideIndex] = useState(0);
 
   function renderImages() {
     if (images && images.length > 0) {
       return images.map((imageSrc, index) => (
-        <Slide className={index !== slideIndex ? "fade hide" : "fade"} key={index}>
+        <Slide className={index !== slideIndex ? "fade hide " : "fade " + className} key={index}>
           <img src={imageSrc || require("../../assets/imagePlaceholder.jpeg")}></img>
         </Slide>
       ));
@@ -28,7 +33,7 @@ const ImagesCarousel = ({ images }: { images: string[] | undefined }): JSX.Eleme
   }
 
   return (
-    <SlideShow>
+    <SlideShow className={className}>
       {renderImages()}
       {isMultipleSlides() && (
         <div className="arrows-container">

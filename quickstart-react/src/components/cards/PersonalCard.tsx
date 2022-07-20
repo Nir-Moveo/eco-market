@@ -7,6 +7,7 @@ import WishlistIcon from "../wishlist/WishlistIcon";
 import _ from "lodash";
 import { getItemsByIds } from "../../services/monday.api";
 import Button from "../buttons/Button";
+import PersonalCardInfo from "./PersonalCardInfo";
 
 const PersonalCard = ({ card, type }: { card: ICard; type: Groups }) => {
   const [newCard, setNewCard] = useState(card);
@@ -19,7 +20,7 @@ const PersonalCard = ({ card, type }: { card: ICard; type: Groups }) => {
 
   const renderActiveCardSettings = () => {
     return (
-      <div className="active-settings">
+      <div className="settings">
         <Button clickHandler={() => {}} type={Buttons.Primary} title="Edit" />
         <Button clickHandler={() => {}} type={Buttons.Secondary} title="Given" />
         <Button clickHandler={() => {}} type={Buttons.Delete} title="Delete" />
@@ -28,7 +29,7 @@ const PersonalCard = ({ card, type }: { card: ICard; type: Groups }) => {
   };
   const renderNonActiveCardSettings = () => {
     return (
-      <div className="active-settings">
+      <div className="settings">
         <Button clickHandler={() => {}} type={Buttons.Primary} title="Activate item" />
         <Button clickHandler={() => {}} type={Buttons.Delete} title="Delete" />
       </div>
@@ -38,8 +39,9 @@ const PersonalCard = ({ card, type }: { card: ICard; type: Groups }) => {
   return (
     <PersonalCardContainer>
       <div className="left-container">
-        <ImagesCarousel images={newCard.images} />
-        <CardInfo {...newCard} />
+        <ImagesCarousel className="personal" images={newCard.images} />
+        <PersonalCardInfo {...newCard} />
+
         <WishlistIcon item={newCard} getCardInfo={(itemId) => getCardInfo(itemId)} />
       </div>
       <div className="right-container">

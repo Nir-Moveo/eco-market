@@ -3,27 +3,23 @@ import { Groups, ICardList } from "../../types/types";
 import _ from "lodash";
 import { getMyItems } from "../../services/monday.api";
 import PersonalCardList from "../cards/PersonalCardList";
-import { Tab, TabsContainer } from "./PersonalPageStyle";
+import { PersonalPageContainer, Tab, TabsContainer } from "./PersonalPageStyle";
 
-interface PersonalPageProps {
-  cards: ICardList;
-  setCards(cards: ICardList): void;
-}
-const PersonalPage: React.FC<PersonalPageProps> = (props: PersonalPageProps) => {
-  const { cards, setCards } = props;
+const PersonalPage = () => {
   const [tab, setTab] = useState(Groups.Active);
+  const [myCards, setMyCards] = useState<ICardList>([]);
 
   async function getItems(group: Groups) {
     const myCards = await getMyItems(group);
-    setCards(myCards);
+    setMyCards(myCards);
   }
   useEffect(() => {
+    setMyCards([]);
     getItems(tab);
   }, [tab]);
 
-  
   return (
-    <div>
+    <PersonalPageContainer>
       <h1>Your items</h1>
       <TabsContainer>
         <Tab onClick={() => setTab(Groups.Active)} className={tab === Groups.Active ? "active" : ""}>
@@ -33,8 +29,8 @@ const PersonalPage: React.FC<PersonalPageProps> = (props: PersonalPageProps) => 
           Non-active items
         </Tab>
       </TabsContainer>
-      <PersonalCardList type={tab} cards={cards}></PersonalCardList>;
-    </div>
+      <PersonalCardList type={tab} cards={myCards}></PersonalCardList>
+    </PersonalPageContainer>
   );
 };
 
