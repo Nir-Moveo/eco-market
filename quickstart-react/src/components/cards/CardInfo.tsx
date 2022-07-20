@@ -1,4 +1,4 @@
-import { Title, Description, Date, InfoContainer } from "./CardStyle";
+import { Title, Description, Date, InfoContainer, CategoryIcon } from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
 import React, { Component, useEffect, useState } from "react";
 import { ICard } from "../../types/types";
@@ -10,7 +10,7 @@ import { CustomBanner } from "./Banner";
 import moment from "moment";
 
 const CardInfo = (props: ICard) => {
-  const { name, description, owner, interested, created_at } = props;
+  const { name, description, owner, interested, created_at, category } = props;
   const [showHover, setShowHover] = useState(false);
 
   const randomColor = (name: string) => {
@@ -43,7 +43,15 @@ const CardInfo = (props: ICard) => {
       );
     });
   };
-
+  const getIcon = (category: string) => {
+    let icon;
+    try {
+      icon = require(`../side-menu/assets/${category.toLowerCase()}.svg`);
+    } catch {
+      return;
+    }
+    return icon;
+  };
   return (
     <InfoContainer>
       <div className="owner-container">
@@ -63,7 +71,10 @@ const CardInfo = (props: ICard) => {
         <span className="display-name">{owner.display_name}</span>
       </div>
       <div className="item-info-container">
-        <Title>{name}</Title>
+        <Title className="title">
+          <CategoryIcon src={getIcon(category)}></CategoryIcon>
+          {name}
+        </Title>
         <Date>{moment(created_at).format("LLL")}</Date>
         <Tooltip title={description}>
           <Description>{description}</Description>

@@ -49,6 +49,16 @@ const PersonalCardInfo = (props: ICard) => {
     top: 15,
     cursor: "pointer",
   };
+  
+  const getIcon = (category: string) => {
+    let icon;
+    try {
+      icon = require(`../side-menu/assets/${category.toLowerCase()}.svg`);
+    } catch {
+      icon = require(`../side-menu/assets/other.svg`);
+    }
+    return icon;
+  };
 
   return (
     <>
@@ -56,7 +66,10 @@ const PersonalCardInfo = (props: ICard) => {
         <div className="item-info-container">
           <div className="top-container">
             <PersonalTitle>{name}</PersonalTitle>
-            <PersonalCategory>{category}</PersonalCategory>
+            <PersonalCategory>
+              <img src={getIcon(category)}></img>
+              {category}
+            </PersonalCategory>
           </div>
           <Tooltip title={description}>
             <Description className="personal">{description}</Description>
