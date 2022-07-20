@@ -177,7 +177,9 @@ export const PersonalCardContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 24px;
   overflow: hidden;
-
+  &.delete {
+    display: none;
+  }
   .left-container {
     display: flex;
   }

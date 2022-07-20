@@ -27,7 +27,7 @@ const PersonalCardInfo = (props: ICard) => {
   };
 
   const showInterestedList = () => {
-    if (interested.length > 0) handleOpen();
+    if (interested && interested.length > 0) handleOpen();
   };
 
   const style = {
@@ -49,7 +49,7 @@ const PersonalCardInfo = (props: ICard) => {
     top: 15,
     cursor: "pointer",
   };
-  
+
   const getIcon = (category: string) => {
     let icon;
     try {
@@ -78,7 +78,7 @@ const PersonalCardInfo = (props: ICard) => {
             <div>Created at {moment(created_at).format("LLL")}</div>
             <div className="vartical-line"></div>
             <div className="interested" onClick={showInterestedList}>
-              {interested.length} interested people
+              {interested ? interested.length : 0} interested people
             </div>
           </div>
         </div>
