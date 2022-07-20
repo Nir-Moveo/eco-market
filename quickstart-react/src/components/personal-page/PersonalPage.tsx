@@ -8,11 +8,16 @@ import { PersonalPageContainer, Tab, TabsContainer } from "./PersonalPageStyle";
 const PersonalPage = () => {
   const [tab, setTab] = useState(Groups.Active);
   const [myCards, setMyCards] = useState<ICardList>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function getItems(group: Groups) {
+    setIsLoading(true);
+
     const myCards = await getMyItems(group);
     setMyCards(myCards);
+    setIsLoading(false);
   }
+
   useEffect(() => {
     setMyCards([]);
     getItems(tab);
@@ -29,7 +34,7 @@ const PersonalPage = () => {
           Non-active items
         </Tab>
       </TabsContainer>
-      <PersonalCardList type={tab} cards={myCards}></PersonalCardList>
+      <PersonalCardList type={tab} cards={myCards} isLoading={isLoading}></PersonalCardList>
     </PersonalPageContainer>
   );
 };

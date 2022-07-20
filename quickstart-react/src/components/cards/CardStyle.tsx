@@ -3,8 +3,11 @@ import { Colors } from "../../colors";
 
 export const Title = styled.span`
   margin: 0;
+  padding: 8px 0;
   font-weight: 600;
   font-size: 1.125rem;
+  display: flex;
+  align-items: center;
   color: ${Colors.PRIMARY_BLACK};
 `;
 export const Category = styled.span`
@@ -12,6 +15,11 @@ export const Category = styled.span`
   font-weight: 400;
   font-size: 1.125rem;
   color: ${Colors.PRIMARY_BLACK};
+`;
+export const CategoryIcon = styled.img`
+  height: 20px;
+  width: 20px;
+  padding-right: 8px;
 `;
 export const PersonalTitle = styled.span`
   margin: 0;
@@ -23,7 +31,15 @@ export const PersonalCategory = styled.span`
   margin-left: 16px;
   font-weight: 400;
   font-size: 0.875rem;
+  flex-flow: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: ${Colors.PRIMARY_BLACK};
+  img {
+    height: 20px;
+    width: 20px;
+  }
 `;
 
 export const Image = styled.img`
@@ -87,10 +103,13 @@ export const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 8px;
+    .title {
+      padding: 8px 0px;
+    }
     .top-container,
     .bottom-container {
       display: flex;
-      align-content: center;
+      align-items: center;
       .vartical-line {
         height: 20px;
         width: 1px;
