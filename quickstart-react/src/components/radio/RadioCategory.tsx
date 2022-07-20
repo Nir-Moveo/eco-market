@@ -4,11 +4,13 @@ import { Categories } from "../../types/types";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
+import _ from "lodash";
 export interface IRadio {
   label: string;
 }
 const RadioCategory = (props: any) => {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const { item } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
     const category = event.target.value;
@@ -17,11 +19,13 @@ const RadioCategory = (props: any) => {
   };
 
   const renderSelectCategories = () => {
-    return Object.keys(Categories).map((category, index) => (
-      <MenuItem key={category + index} value={category}>
-        {category.replaceAll("_", " ")}
-      </MenuItem>
-    ));
+    return Object.keys(Categories)
+      .slice(1, -1)
+      .map((category, index) => (
+        <MenuItem key={category + index} value={category}>
+          {category.replaceAll("_", " ")}
+        </MenuItem>
+      ));
   };
   return (
     <FormControl>
@@ -30,6 +34,7 @@ const RadioCategory = (props: any) => {
         id="demo-simple-select"
         onChange={handleChange}
         value={selectedCategory}
+        defaultValue={_.capitalize(item)}
       >
         {renderSelectCategories()}
       </Select>

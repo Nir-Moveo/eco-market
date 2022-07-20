@@ -53,7 +53,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
           <MainTitle>Today's best items</MainTitle>
           <SubTitle>{factsArray[randomNumber]}</SubTitle>
         </div>
-        <Modal updateCards={getCards} />
+        <Modal updateCards={getCards}/>
       </TopLine>
       <ContentDiv>
         <CardList cards={cards} isLoading={isLoading}></CardList>
