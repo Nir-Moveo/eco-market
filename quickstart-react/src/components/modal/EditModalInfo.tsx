@@ -101,7 +101,7 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
             onChange={(e: any) => {
               onRadioChange(e);
             }}
-            item={item?.category ?? ""}
+            item={item ?? ""}
           />
         </ContainerTitle>
 

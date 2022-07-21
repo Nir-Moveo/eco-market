@@ -40,16 +40,9 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
   };
 
   const popupContainer = {
-    height: "252px",
-    width: "558px",
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    overflowY: "auto",
-    transform: "translate(-50%, -50%)",
-    boxShadow: 24,
-    p: 4,
     borderRadius: "16px",
+    'border-radius': '16px',
+    padding: '16px'
   };
   const titleStyle = {
     font: "Roboto",
@@ -63,7 +56,7 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
       case "delete":
         return `Delete item '${item.name}' ?`;
       case "given":
-        return `Given item '${item.name}' ?`;
+        return `Mark '${item.name}' as given`;
       case "activate":
         return `Activate item '${item.name}' ?`;
       default:
@@ -75,10 +68,9 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
       case "delete":
         return `Deleting the item will remove it from the Eco Market board and marketplace. Are you sure you want to delete?`;
       case "given":
-        return `Given `;
+        return `By marking the item as given, it wiil be removed from the Eco Market marketplace and will not be visible to your teamates.`;
       case "activate":
-        return `Activat
-        `;
+        return `Please confirm activating this item`;
       default:
         return;
     }
@@ -101,6 +93,8 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
     <div>
       <Dialog
         // sx={popupContainer}
+        PaperProps={{
+          style: { borderRadius: 16, padding:16 }   }}
         open={show}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
