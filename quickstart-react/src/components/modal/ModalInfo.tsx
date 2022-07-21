@@ -1,21 +1,26 @@
 import * as React from "react";
 import ImageUpload from "../image-upload/ImageUpload";
 import RadioCategory from "../radio/RadioCategory";
-import { Title, ModalContainer, ContainerTitle, LoaderContainer } from "./ModalInfoStyle";
+import {
+  Title,
+  ModalContainer,
+  ContainerTitle,
+  LoaderContainer,
+} from "./ModalInfoStyle";
 import { useState } from "react";
-import { Box, Button, InputLabel, TextField } from "@mui/material";
+import { Box, InputLabel, TextField } from "@mui/material";
 import { addNewItem } from "../../services/monday.api";
-import { Categories } from "../../types/types";
+import { Buttons, Categories } from "../../types/types";
 import Loader from "../loader/Loader";
+import Button from "../buttons/Button";
 
 const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
-
   const [item, setItem] = useState<string>("");
   const [itemDescription, setItemDescription] = useState<string>("");
   const [itemImages, setItemImages] = useState<any>();
   const [radioValue, setRadioValue] = useState<Categories>(Categories.Other);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const [titleError, setTitleError] = useState(false)
+  const [titleError, setTitleError] = useState(false);
 
   const onRadioChange = (e: Categories) => {
     setRadioValue(e);
@@ -23,11 +28,11 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setTitleError(false)
-    if (item == '') {
-      setTitleError(true)
+    setTitleError(false);
+    if (item == "") {
+      setTitleError(true);
     }
-    if(item !== ''){
+    if (item !== "") {
       setIsLoading(true);
       const payload = {
         name: item,
@@ -35,10 +40,10 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
         category: radioValue ?? Categories.Other,
         images: itemImages,
       };
-  
+
       await addNewItem(payload);
       await props.updateCards();
-      
+
       props.onClose();
       setIsLoading(false);
     }
@@ -46,7 +51,12 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
 
   return !isLoading ? (
     <ModalContainer>
-      <form className="form-container" noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <form
+        className="form-container"
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         <Title>Add items to trade</Title>
         <InputLabel className="padding-top" shrink htmlFor="input">
           Item name
@@ -92,9 +102,11 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
         </ContainerTitle>
 
         <Box className="button">
-          <Button type="submit" variant="contained" size="medium">
-            Add Item
-          </Button>
+          <Button
+            title={"Add Item"}
+            type={Buttons.Primary}
+            clickHandler={handleSubmit}
+          />
         </Box>
       </form>
     </ModalContainer>
