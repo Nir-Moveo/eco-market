@@ -133,7 +133,7 @@ export const InfoContainer = styled.div`
 export const CardContainer = styled.div`
   position: relative;
   height: 430px;
-  width: 288px;
+  width: clamp(288px, 20%, 380px);
   background: ${Colors.GREY};
   border: 1px solid ${Colors.GREEN};
   /* box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07); */
@@ -284,6 +284,9 @@ export const CardListContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   gap: 24px;
+  @media (max-width: 1380px) {
+    justify-content: space-around;
+  }
 `;
 export const PersonalCardListContainer = styled.div`
   flex-flow: wrap;
