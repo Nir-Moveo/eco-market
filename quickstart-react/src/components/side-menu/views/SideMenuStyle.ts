@@ -8,7 +8,7 @@ export const SideContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: fit-content;
-  height: 100vh;
+  height: 10vh;
 `;
 
 export const MenuItemDiv = styled.div`
@@ -18,11 +18,14 @@ export const MenuItemDiv = styled.div`
   align-items: center;
   height: fit-content;
   cursor: pointer;
-  width: 100%; 
+  width: 100%;
   &:hover {
     background-color: ${Colors.sideBarHover};
   }
-  background-color: ${(props:MenuItemProps) => props.isSelected ? Colors.sideBarSelected : ''};
+  background-color: ${(props: MenuItemProps) => (props.isSelected ? Colors.sideBarHover : "")};
+  &:nth-last-child(2) {
+    margin-top: 30vh;
+  }
 `;
 
 export const SideBar = styled.div`
@@ -33,7 +36,6 @@ export const SideBar = styled.div`
   align-content: flex-start;
   border-radius: 8px;
   width: 240px;
-  /* height: 100%; */
   background-color: ${Colors.sideBarBg};
   margin: 0 32px 0px 32px;
   padding-bottom: 32px;

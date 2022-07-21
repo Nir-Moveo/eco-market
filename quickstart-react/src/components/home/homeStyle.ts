@@ -5,15 +5,15 @@ export const HomeBody = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  margin-top:42px;
+  margin-top: 42px;
 `;
 
 export const ContentDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-height: 100vh;
-  overflow-y:auto;
+  max-height: 160vh;
+  overflow-y: auto;
 `;
 
 export const TopLine = styled.div`

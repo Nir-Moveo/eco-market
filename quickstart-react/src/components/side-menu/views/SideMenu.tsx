@@ -1,18 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import {
-  getItemsByCategory,
-  getItemsByGroup,
-  getWishlist,
-} from "../../../services/monday.api";
+import { getItemsByCategory, getItemsByGroup, getWishlist } from "../../../services/monday.api";
 import { Categories, Groups, ICard, ICardList } from "../../../types/types";
 import MenuItem from "../components/MenuItem";
-import {
-  SideBar,
-  SideTitle,
-  SideContainer,
-  MenuItemDiv,
-} from "./SideMenuStyle";
+import { SideBar, SideTitle, SideContainer, MenuItemDiv } from "./SideMenuStyle";
 import Header from "../../header/Header";
 export interface SideMenuProps {
   setCards(cards: ICardList): void;
@@ -32,6 +23,7 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
 
   const selectCategory = async (category: Categories) => {
     setIsLoading(true);
+    setSelectedCategory(category);
     setIsPersonalPage(false);
     let newCards: ICard[] | null = null;
     if ((category as String) === "All") {
@@ -44,7 +36,6 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
       newCards = await getItemsByCategory(category, Groups.Active);
       setCards(newCards);
     }
-    setSelectedCategory(category);
     setIsLoading(false);
   };
 
@@ -66,11 +57,7 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
               onClick={() => selectCategory(category as Categories)}
               isSelected={selectedCategory === category}
             >
-              <MenuItem
-                key={index}
-                itemName={category}
-                itemIcon={lowerCatName}
-              />
+              <MenuItem key={index} itemName={category} itemIcon={lowerCatName} />
             </MenuItemDiv>
           );
         })}
