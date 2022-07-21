@@ -278,11 +278,11 @@ export const Slide = styled.div`
   }
 `;
 
-export const CardListContainer = styled.div`
+export const CardListContainer = styled.div<{ numOfItems?: any }>`
   display: flex;
   flex-flow: wrap;
   width: 100%;
-  justify-content: space-between;
+  justify-content: ${(props) => (props.numOfItems && props.numOfItems < 3 ? "space-around" : "space-between")};
   gap: 24px;
   @media (max-width: 1380px) {
     justify-content: space-around;

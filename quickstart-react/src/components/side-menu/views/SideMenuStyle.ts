@@ -22,7 +22,7 @@ export const MenuItemDiv = styled.div`
   &:hover {
     background-color: ${Colors.sideBarHover};
   }
-  background-color: ${(props: MenuItemProps) => (props.isSelected ? Colors.sideBarHover : "")};
+  background-color: ${(props: MenuItemProps) => (props.isSelected ? Colors.sideBarSelected : "")};
   &:nth-last-child(2) {
     margin-top: 30vh;
   }
