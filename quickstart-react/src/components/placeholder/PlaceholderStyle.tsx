@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const PlaceholderContainer = styled.div`
+  margin-top: 24vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

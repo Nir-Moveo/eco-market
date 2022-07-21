@@ -4,6 +4,7 @@ import _ from "lodash";
 import { getMyItems } from "../../services/monday.api";
 import PersonalCardList from "../cards/PersonalCardList";
 import { PersonalPageContainer, Tab, TabsContainer } from "./PersonalPageStyle";
+import Placeholder from "../placeholder/Placeholder";
 
 const PersonalPage = () => {
   const [tab, setTab] = useState(Groups.Active);
@@ -34,7 +35,11 @@ const PersonalPage = () => {
           Non-active items
         </Tab>
       </TabsContainer>
-      <PersonalCardList type={tab} cards={myCards} isLoading={isLoading}></PersonalCardList>
+      {isLoading || myCards.length ? (
+        <PersonalCardList type={tab} cards={myCards} isLoading={isLoading} />
+      ) : (
+        <Placeholder title="No items to display..." subTitle=""></Placeholder>
+      )}
     </PersonalPageContainer>
   );
 };
