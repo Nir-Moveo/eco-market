@@ -22,6 +22,7 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
   const [itemImages, setItemImages] = useState<any>();
   const [radioValue, setRadioValue] = useState<Categories>(Categories.Other);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [titleError, setTitleError] = useState(false)
 
   const onRadioChange = (e: Categories) => {
     setRadioValue(e);
@@ -37,23 +38,29 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
-    const valuesToUpdate = {
-      name: name,
-      description: itemDescription,
-      category: radioValue,
-    };
-    const columns = await columnIdsFromStorage([Columns.Description, Columns.Category, Columns.Images]);
-
-    if (itemImages && itemImages.length > 0) {
-      await addImagesToItem(item.id, columns[Columns.Images], itemImages);
+    setTitleError(false)
+    if (name == '') {
+      setTitleError(true)
     }
-    await editItem(item.id, valuesToUpdate);
-    const newItem = await getItemsByIds([item.id], Groups.Active);
-    await updateCard({ ...newItem[0], ...valuesToUpdate });
+    if (name !== '') {
+      setIsLoading(true);
+      const valuesToUpdate = {
+        name: name,
+        category: radioValue ?? Categories.Other,
+        description: itemDescription,
+      };
+      const columns = await columnIdsFromStorage([Columns.Description, Columns.Category, Columns.Images]);
 
-    await props.onClose();
-    setIsLoading(false);
+      if (itemImages && itemImages.length > 0) {
+        await addImagesToItem(item.id, columns[Columns.Images], itemImages);
+      }
+      await editItem(item.id, valuesToUpdate);
+      const newItem = await getItemsByIds([item.id], Groups.Active);
+      await updateCard({ ...newItem[0], ...valuesToUpdate });
+
+      await props.onClose();
+      setIsLoading(false);
+    }
   };
 
   return !isLoading ? (
@@ -73,6 +80,7 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
           id="input-name"
           size="small"
           defaultValue={item?.name ?? ""}
+          error={titleError}
         />
         <InputLabel className="padding-top" shrink htmlFor="input">
           Item description

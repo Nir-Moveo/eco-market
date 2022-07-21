@@ -97,7 +97,9 @@ const PersonalCard = (props: IPersonalCard) => {
         <div className="right-container">
           {type === Groups.Active ? renderActiveCardSettings() : renderNonActiveCardSettings()}
         </div>
-        {showEdit && (
+ 
+      </PersonalCardContainer>
+      {showEdit && (
           <EditModal
             updateCard={(newCard: ICard) => setNewCard(newCard)}
             card={newCard}
@@ -105,7 +107,6 @@ const PersonalCard = (props: IPersonalCard) => {
             setShowEdit={setShowEdit}
           />
         )}
-      </PersonalCardContainer>
       <Popup status={popupType} item={card} show={showPopup} setShowPopup={setShowPopup} setIsDelete={setIsDelete} />
     </>
   );
