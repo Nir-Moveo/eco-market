@@ -9,11 +9,13 @@ import { Categories } from "../../types/types";
 import Loader from "../loader/Loader";
 
 const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
+
   const [item, setItem] = useState<string>("");
   const [itemDescription, setItemDescription] = useState<string>("");
   const [itemImages, setItemImages] = useState<any>();
   const [radioValue, setRadioValue] = useState<Categories>(Categories.Other);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [titleError, setTitleError] = useState(false)
 
   const onRadioChange = (e: Categories) => {
     setRadioValue(e);
@@ -21,19 +23,25 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
-    const payload = {
-      name: item,
-      description: itemDescription,
-      category: radioValue,
-      images: itemImages,
-    };
-
-    await addNewItem(payload);
-    await props.updateCards();
-    
-    props.onClose();
-    setIsLoading(false);
+    setTitleError(false)
+    if (item == '') {
+      setTitleError(true)
+    }
+    if(item !== ''){
+      setIsLoading(true);
+      const payload = {
+        name: item,
+        description: itemDescription,
+        category: radioValue ?? Categories.Other,
+        images: itemImages,
+      };
+  
+      await addNewItem(payload);
+      await props.updateCards();
+      
+      props.onClose();
+      setIsLoading(false);
+    }
   };
 
   return !isLoading ? (
@@ -52,6 +60,7 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
           required
           id="input-name"
           size="small"
+          error={titleError}
         />
         <InputLabel className="padding-top" shrink htmlFor="input">
           Item description

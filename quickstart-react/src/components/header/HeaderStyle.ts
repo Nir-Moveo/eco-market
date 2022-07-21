@@ -6,4 +6,6 @@ export const TopBar = styled.div`
   align-items: center;
   width: 100%;
   padding: 20px;
+  margin-left:16px
+  
 `;
