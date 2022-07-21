@@ -37,7 +37,7 @@ const CardList = (props: CardListProps) => {
       {!(cards.length > 0) && !isLoading && (
         <Placeholder title="No items were found..." subTitle="Try looking for a different item"></Placeholder>
       )}
-      {cards.length > 0 && !isLoading && <CardListContainer>{renderCards(cards)}</CardListContainer>}
+      {cards.length > 0 && !isLoading && <CardListContainer numOfItems={cards.length}>{renderCards(cards)}</CardListContainer>}
     </div>
   );
 };
