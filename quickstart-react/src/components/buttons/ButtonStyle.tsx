@@ -7,7 +7,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   height: fit-content;
   border: 1px solid transparent;
-
+  white-space: nowrap;
   &:hover {
     cursor: pointer;
   }

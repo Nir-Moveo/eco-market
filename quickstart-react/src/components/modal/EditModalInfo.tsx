@@ -1,12 +1,23 @@
 import * as React from "react";
 import ImageUpload from "../image-upload/ImageUpload";
 import RadioCategory from "../radio/RadioCategory";
-import { Title, ModalContainer, ContainerTitle, LoaderContainer } from "./ModalInfoStyle";
+import {
+  Title,
+  ModalContainer,
+  ContainerTitle,
+  LoaderContainer,
+} from "./ModalInfoStyle";
 import { useEffect, useState } from "react";
-import { Box, Button, InputLabel, TextField } from "@mui/material";
-import { addImagesToItem, addNewItem, columnIdsFromStorage, editItem, getItemsByIds } from "../../services/monday.api";
-import { Categories, Columns, Groups, ICard } from "../../types/types";
+import { Box, InputLabel, TextField } from "@mui/material";
+import {
+  addImagesToItem,
+  columnIdsFromStorage,
+  editItem,
+  getItemsByIds,
+} from "../../services/monday.api";
+import { Buttons, Categories, Columns, Groups, ICard } from "../../types/types";
 import Loader from "../loader/Loader";
+import Button from "../buttons/Button";
 
 interface IPlaceholder {
   updateCard: (card: ICard) => void;
@@ -22,7 +33,7 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
   const [itemImages, setItemImages] = useState<any>();
   const [radioValue, setRadioValue] = useState<Categories>(Categories.Other);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [titleError, setTitleError] = useState(false)
+  const [titleError, setTitleError] = useState(false);
 
   const onRadioChange = (e: Categories) => {
     setRadioValue(e);
@@ -38,18 +49,22 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setTitleError(false)
-    if (name == '') {
-      setTitleError(true)
+    setTitleError(false);
+    if (name == "") {
+      setTitleError(true);
     }
-    if (name !== '') {
+    if (name !== "") {
       setIsLoading(true);
       const valuesToUpdate = {
         name: name,
         category: radioValue ?? Categories.Other,
         description: itemDescription,
       };
-      const columns = await columnIdsFromStorage([Columns.Description, Columns.Category, Columns.Images]);
+      const columns = await columnIdsFromStorage([
+        Columns.Description,
+        Columns.Category,
+        Columns.Images,
+      ]);
 
       if (itemImages && itemImages.length > 0) {
         await addImagesToItem(item.id, columns[Columns.Images], itemImages);
@@ -65,7 +80,12 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
 
   return !isLoading ? (
     <ModalContainer>
-      <form className="form-container" noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <form
+        className="form-container"
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         <Title>{item ? "Edit Your Item" : "Add items to trade"}</Title>
         <InputLabel className="padding-top" shrink htmlFor="input">
           Item name
@@ -99,7 +119,11 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
           <InputLabel className="padding-top" shrink htmlFor="input">
             Upload images
           </InputLabel>
-          <ImageUpload item={item} setItemImages={setItemImages} updateCard={updateCard} />
+          <ImageUpload
+            item={item}
+            setItemImages={setItemImages}
+            updateCard={updateCard}
+          />
         </ContainerTitle>
         <ContainerTitle>
           <InputLabel className="padding-top" shrink htmlFor="input">
@@ -114,9 +138,11 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
         </ContainerTitle>
 
         <Box className="button">
-          <Button type="submit" variant="contained" size="medium">
-            {item ? "Save changes" : "Add item"}
-          </Button>
+          <Button
+            title={"Save changes"}
+            type={Buttons.Primary}
+            clickHandler={handleSubmit}
+          />
         </Box>
       </form>
     </ModalContainer>
