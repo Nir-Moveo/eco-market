@@ -3,7 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import { Categories } from "../../types/types";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import _ from "lodash";
 export interface IRadio {
   label: string;
@@ -33,8 +33,7 @@ const RadioCategory = (props: any) => {
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         onChange={handleChange}
-        value={selectedCategory}
-        defaultValue={_.capitalize(item)}
+        value={selectedCategory && selectedCategory.length ? selectedCategory : item ? _.capitalize(item.category) : selectedCategory}
       >
         {renderSelectCategories()}
       </Select>

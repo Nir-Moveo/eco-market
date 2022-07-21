@@ -3,9 +3,10 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
 import ModalInfo from "./ModalInfo";
 import { ModalWrapper } from "./ModalInfoStyle";
+import Button from "../buttons/Button";
+import { Buttons } from "../../types/types";
 
 const style = {
   position: "absolute" as "absolute",
@@ -34,9 +35,7 @@ const ModalComponent = (props: { updateCards: () => void }): JSX.Element => {
 
   return (
     <ModalWrapper>
-      <Button variant="contained" onClick={handleOpen}>
-        + Add Item
-      </Button>
+      <Button clickHandler={handleOpen} type={Buttons.Primary} title="+ Add Item" />
       <Modal
         open={open}
         onClose={handleClose}

@@ -67,7 +67,7 @@ const ImageUpload = ({ setItemImages, item, updateCard }: any) => {
     setShowImagePreview(true);
     const filesArray = Array.prototype.slice.call(files);
     const arr = (await Promise.all(filesArray.map(fileToDataURL))) as string[];
-    setImagesList(arr);
+    setImagesList([...imagesList, ...arr]);
   };
   if (!item) {
     return (
@@ -105,6 +105,11 @@ const ImageUpload = ({ setItemImages, item, updateCard }: any) => {
           <ItemListContainer>
             {renderImages(item.images)}
             <ImagesCarousel images={imagesList} />
+            <input style={{ display: "none" }} id="fusk" type="file" multiple onChange={handleImageChange} />
+            <label className="upload-btn" htmlFor="fusk">
+              <img onChange={handleImageChange} src={require("../../assets/upload-img.svg")} alt="logo" />
+              <span>Upload images</span>
+            </label>
           </ItemListContainer>
         )}
       </EditContainer>
