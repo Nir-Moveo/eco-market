@@ -8,13 +8,13 @@ export const Title = styled.span`
   font-size: 1.125rem;
   display: flex;
   align-items: center;
-  color: ${Colors.PRIMARY_BLACK};
+  color: ${(props) => props.theme.text};
 `;
 export const Category = styled.span`
   margin-left: 16px;
   font-weight: 400;
   font-size: 1.125rem;
-  color: ${Colors.PRIMARY_BLACK};
+  color: ${(props) => props.theme.text};
 `;
 export const CategoryIcon = styled.img`
   height: 20px;
@@ -25,7 +25,7 @@ export const PersonalTitle = styled.span`
   margin: 0;
   font-weight: 600;
   font-size: 1rem;
-  color: ${Colors.PRIMARY_BLACK};
+  color: ${(props) => props.theme.text};
 `;
 export const PersonalCategory = styled.span`
   margin-left: 16px;
@@ -35,7 +35,8 @@ export const PersonalCategory = styled.span`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: ${Colors.PRIMARY_BLACK};
+  color: ${(props) => props.theme.text};
+
   img {
     height: 20px;
     width: 20px;
@@ -95,7 +96,8 @@ export const InfoContainer = styled.div`
       letter-spacing: 0.015625rem;
       font-size: 0.875rem;
       font-weight: 400;
-      color: ${Colors.PRIMARY_BLACK};
+      color: ${(props) => props.theme.text};
+
       text-transform: capitalize;
     }
   }
@@ -122,7 +124,8 @@ export const InfoContainer = styled.div`
     .bottom-container {
       font-weight: 400;
       font-size: 14px;
-      color: ${Colors.PRIMARY_BLACK};
+      color: ${(props) => props.theme.text};
+
       .interested {
         color: ${Colors.PRIMARY_BLUE} !important;
         &:hover {
@@ -137,9 +140,9 @@ export const CardContainer = styled.div`
   position: relative;
   height: 430px;
   width: clamp(288px, 20%, 380px);
-  background: ${Colors.GREY};
-  border: 1px solid ${Colors.BORDER_CARD};
-
+  background: ${(props) => props.theme.cardBackground};
+  border: 1px solid ${(props) => props.theme.cardBorder};
+  color: ${(props) => props.theme.text};
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -159,7 +162,7 @@ export const CardContainer = styled.div`
   }
   .interested-text {
     color: ${Colors.DARK_GREEN};
-    font-size: 12px;
+    font-size: 14px;
   }
   .interested-container {
     display: flex;
@@ -175,8 +178,8 @@ export const CardContainer = styled.div`
 export const PersonalCardContainer = styled.div`
   position: relative;
   height: 150px;
-  background: ${Colors.WHITE};
-  border: 1px solid ${Colors.SECONDARY_GREY};
+  background: ${(props) => props.theme.cardBackground};
+  border: 1px solid ${(props) => props.theme.cardBorder};
   border-radius: 10px;
   display: flex;
   justify-content: space-between;

@@ -58,6 +58,8 @@ const EditModalComponent: React.FC<IPlaceholder> = (props: IPlaceholder) => {
         BackdropProps={{
           timeout: 500,
         }}
+        disableAutoFocus={true}
+        disableEnforceFocus={true}
       >
         <Fade in={show}>
           <Box sx={style}>
@@ -69,7 +71,11 @@ const EditModalComponent: React.FC<IPlaceholder> = (props: IPlaceholder) => {
               height="12"
               width="12"
             />
-            <EditModalInfo item={card} onClose={handleClose} updateCard={(card: ICard) => updateCard(card)} />
+            <EditModalInfo
+              item={card}
+              onClose={handleClose}
+              updateCard={(card: ICard) => updateCard(card)}
+            />
           </Box>
         </Fade>
       </Modal>

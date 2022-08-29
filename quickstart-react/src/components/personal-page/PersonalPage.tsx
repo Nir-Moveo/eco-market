@@ -28,10 +28,16 @@ const PersonalPage = () => {
     <PersonalPageContainer>
       <h1>Your items</h1>
       <TabsContainer>
-        <Tab onClick={() => setTab(Groups.Active)} className={tab === Groups.Active ? "active" : ""}>
+        <Tab
+          onClick={() => setTab(Groups.Active)}
+          className={tab === Groups.Active ? "active" : ""}
+        >
           Active items
         </Tab>
-        <Tab onClick={() => setTab(Groups.Sold)} className={tab === Groups.Sold ? "active" : ""}>
+        <Tab
+          onClick={() => setTab(Groups.Sold)}
+          className={tab === Groups.Sold ? "active" : ""}
+        >
           Non-active items
         </Tab>
       </TabsContainer>

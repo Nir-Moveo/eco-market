@@ -14,20 +14,15 @@ export enum Colors {
   DARK_GREEN = "#258750",
   TRANSPARENT_DARK = "#0000004c",
   BORDER_CARD = "#ebebeb",
-}
+  SIDE_BAR_HOVER = "#E6E9EF",
+  SIDE_BAR_SELECTED = "#cce5ff",
 
-export const lightTheme = {
-  body: Colors.PRIMARY_WHITE,
-  text: Colors.PRIMARY_BLACK,
-  toggleBorder: Colors.PRIMARY_WHITE,
-  background: Colors.PRIMARY_BLACK,
-};
-export const darkTheme = {
-  body: Colors.PRIMARY_BLACK,
-  text: Colors.PRIMARY_WHITE,
-  toggleBorder: Colors.PRIMARY_GREY,
-  background: Colors.SECONDARY_GREY,
-};
+  DARK_THEME_PRIMARY = "#191C32",
+  DARK_THEME_TEXT = "#D5D8DF",
+  DARK_THEME_SECONDARY = "#33354B",
+  DARK_SIDE_BAR_HOVER = "#75768856",
+  DARK_SIDE_BAR_SELECTED = "#8286bb6e"
+}
 
 export const colorsArr = [
   "#401694",

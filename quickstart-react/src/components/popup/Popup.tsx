@@ -5,8 +5,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Buttons, Groups, ICard } from "../../types/types";
-import { deleteItem, moveItemToGroup } from "../../services/monday.api";
+import {
+  deleteItem,
+  moveItemToGroup,
+  storageGetItem,
+} from "../../services/monday.api";
 import Button from "../buttons/Button";
+import { useEffect, useState } from "react";
+import { Colors } from "../../colors";
 
 interface IPopup {
   // updateCards: () => void,
@@ -39,10 +45,21 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
     setIsDelete(true);
   };
 
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const theme = await storageGetItem("theme");
+      setTheme(theme);
+    };
+    fetchData();
+  });
+
   const popupContainer = {
     borderRadius: "8px",
-    'border-radius': '8px',
-    padding: '16px'
+    "border-radius": "8px",
+    padding: "16px",
+    backgroundColor:
+      theme === "light" ? Colors.PRIMARY_WHITE : Colors.DARK_THEME_PRIMARY,
   };
   const titleStyle = {
     font: "Roboto",
@@ -79,11 +96,29 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
   const renderActionButton = () => {
     switch (status) {
       case "delete":
-        return <Button clickHandler={handleDelete} type={Buttons.Delete} title="Delete" />;
+        return (
+          <Button
+            clickHandler={handleDelete}
+            type={Buttons.Delete}
+            title="Delete"
+          />
+        );
       case "given":
-        return <Button clickHandler={handleGiven} type={Buttons.Primary} title="Given item" />;
+        return (
+          <Button
+            clickHandler={handleGiven}
+            type={Buttons.Primary}
+            title="Given item"
+          />
+        );
       case "activate":
-        return <Button clickHandler={handleActivate} type={Buttons.Primary} title="Activate item" />;
+        return (
+          <Button
+            clickHandler={handleActivate}
+            type={Buttons.Primary}
+            title="Activate item"
+          />
+        );
       default:
         return;
     }
@@ -94,7 +129,8 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
       <Dialog
         // sx={popupContainer}
         PaperProps={{
-          style: { borderRadius: 16, padding:16 }   }}
+          style: { borderRadius: 16, padding: 16 },
+        }}
         open={show}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -104,10 +140,16 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
           {getTitle()}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">{getSubTitle()}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {getSubTitle()}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button clickHandler={handleClose} type={Buttons.Secondary} title="Cancel" />
+          <Button
+            clickHandler={handleClose}
+            type={Buttons.Secondary}
+            title="Cancel"
+          />
           {renderActionButton()}
         </DialogActions>
       </Dialog>
