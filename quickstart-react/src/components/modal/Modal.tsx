@@ -19,7 +19,7 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  borderRadius: "16px",
+  borderRadius: "8px",
 };
 const styleImg = {
   position: "absolute" as "absolute",
@@ -35,7 +35,11 @@ const ModalComponent = (props: { updateCards: () => void }): JSX.Element => {
 
   return (
     <ModalWrapper>
-      <Button clickHandler={handleOpen} type={Buttons.Primary} title="+ Add Item" />
+      <Button
+        clickHandler={handleOpen}
+        type={Buttons.Primary}
+        title="+ Add Item"
+      />
       <Modal
         open={open}
         onClose={handleClose}
@@ -44,6 +48,8 @@ const ModalComponent = (props: { updateCards: () => void }): JSX.Element => {
         BackdropProps={{
           timeout: 500,
         }}
+        disableAutoFocus={true}
+        disableEnforceFocus={true}
       >
         <Fade in={open}>
           <Box sx={style}>

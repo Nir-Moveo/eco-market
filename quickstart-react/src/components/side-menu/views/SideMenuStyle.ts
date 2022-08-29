@@ -16,7 +16,7 @@ export const MenuItemDiv = styled.div`
   justify-content: flex-start;
   border-radius: 8px;
   align-items: center;
-  height: fit-content;
+  height: 32px;
   cursor: pointer;
   width: 100%;
   &:hover {

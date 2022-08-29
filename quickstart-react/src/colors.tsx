@@ -11,9 +11,23 @@ export enum Colors {
   GREEN = "#BBDBC9",
   PRIMARY_WHITE = "#f5f5f5",
   WHITE = "#ffffff",
-
   DARK_GREEN = "#258750",
+  TRANSPARENT_DARK = "#0000004c",
+  BORDER_CARD = "#ebebeb",
 }
+
+export const lightTheme = {
+  body: Colors.PRIMARY_WHITE,
+  text: Colors.PRIMARY_BLACK,
+  toggleBorder: Colors.PRIMARY_WHITE,
+  background: Colors.PRIMARY_BLACK,
+};
+export const darkTheme = {
+  body: Colors.PRIMARY_BLACK,
+  text: Colors.PRIMARY_WHITE,
+  toggleBorder: Colors.PRIMARY_GREY,
+  background: Colors.SECONDARY_GREY,
+};
 
 export const colorsArr = [
   "#401694",

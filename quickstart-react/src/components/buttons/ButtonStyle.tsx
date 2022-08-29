@@ -2,12 +2,14 @@ import styled from "styled-components";
 import { Colors } from "../../colors";
 
 export const ButtonContainer = styled.div`
-  padding: 7px;
+  padding: 8px 16px 8px 16px;
   border-radius: 4px;
   display: flex;
   height: fit-content;
   border: 1px solid transparent;
   white-space: nowrap;
+  font-size: 16px;
+  font-weight: 400;
   &:hover {
     cursor: pointer;
   }

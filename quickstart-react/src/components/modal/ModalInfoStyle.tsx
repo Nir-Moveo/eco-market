@@ -16,6 +16,7 @@ export const ModalContainer = styled.div`
   }
 
   .button {
+    padding-top: 16px;
     margin: 0 auto;
   }
 
@@ -39,7 +40,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const Divider = styled.div`
-  border-top: thin solid rgba(0, 0, 0, 0.12);
+  border-top: thin solid ${Colors.TRANSPARENT_DARK}
   margin-top: 12px;
 `;
 export const ModalWrapper = styled.div`
@@ -50,9 +51,8 @@ export const ModalWrapper = styled.div`
   }
 `;
 export const Title = styled.span`
-  margin: 0 auto;
-  font-weight: 500;
-  font-size: 2.2rem;
+  font-weight: 700;
+  font-size: 24px;
   color: ${Colors.PRIMARY_BLACK};
   margin-top: 12px;
   margin-bottom: 22px;

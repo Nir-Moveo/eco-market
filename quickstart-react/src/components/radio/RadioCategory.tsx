@@ -8,6 +8,9 @@ import _ from "lodash";
 export interface IRadio {
   label: string;
 }
+const style = {
+  height: "40px",
+};
 const RadioCategory = (props: any) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const { item } = props;
@@ -30,10 +33,17 @@ const RadioCategory = (props: any) => {
   return (
     <FormControl>
       <Select
+        style={style}
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         onChange={handleChange}
-        value={selectedCategory && selectedCategory.length ? selectedCategory : item ? _.capitalize(item.category) : selectedCategory}
+        value={
+          selectedCategory && selectedCategory.length
+            ? selectedCategory
+            : item
+            ? _.capitalize(item.category)
+            : selectedCategory
+        }
       >
         {renderSelectCategories()}
       </Select>

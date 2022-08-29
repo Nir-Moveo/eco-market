@@ -40,8 +40,8 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
   };
 
   const popupContainer = {
-    borderRadius: "16px",
-    'border-radius': '16px',
+    borderRadius: "8px",
+    'border-radius': '8px',
     padding: '16px'
   };
   const titleStyle = {

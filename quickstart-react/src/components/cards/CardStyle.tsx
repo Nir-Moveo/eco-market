@@ -57,14 +57,14 @@ export const Image = styled.img`
 export const Date = styled.span`
   letter-spacing: 0.015625rem;
   color: ${Colors.PRIMARY_GREY};
-  font-size: 0.625rem;
-  font-weight: 100;
+  font-size: 0.8rem;
+  font-weight: 400;
 `;
 
 export const Description = styled.p`
   margin: 19.25px 0;
-  font-weight: 100;
-  font-size: 0.875rem;
+  font-weight: 400;
+  font-size: 0.9rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -94,7 +94,7 @@ export const InfoContainer = styled.div`
     .display-name {
       letter-spacing: 0.015625rem;
       font-size: 0.875rem;
-      font-weight: 100;
+      font-weight: 400;
       color: ${Colors.PRIMARY_BLACK};
       text-transform: capitalize;
     }
@@ -105,6 +105,8 @@ export const InfoContainer = styled.div`
     margin-top: 8px;
     .title {
       padding: 8px 0px;
+      weight: 700;
+      font-size: 1.1rem;
     }
     .top-container,
     .bottom-container {
@@ -122,6 +124,7 @@ export const InfoContainer = styled.div`
       font-size: 14px;
       color: ${Colors.PRIMARY_BLACK};
       .interested {
+        color: ${Colors.PRIMARY_BLUE} !important;
         &:hover {
           cursor: pointer;
         }
@@ -135,13 +138,16 @@ export const CardContainer = styled.div`
   height: 430px;
   width: clamp(288px, 20%, 380px);
   background: ${Colors.GREY};
-  border: 1px solid ${Colors.GREEN};
-  /* box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07); */
-  border-radius: 10px;
+  border: 1px solid ${Colors.BORDER_CARD};
+
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  /* margin: 0 24px 24px 0; */
-  /* overflow: auto; */
+
+  .avatar-group {
+    padding-right: 4px;
+  }
+
   .avatar-group > .MuiAvatar-root,
   .avatar {
     height: 28px;
@@ -171,7 +177,6 @@ export const PersonalCardContainer = styled.div`
   height: 150px;
   background: ${Colors.WHITE};
   border: 1px solid ${Colors.SECONDARY_GREY};
-  /* box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07); */
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
@@ -201,20 +206,20 @@ export const SlideShow = styled.div`
   .prev,
   .next {
     border-radius: 200px;
-    background: rgba(0, 0, 0, 0.1);
+    background: ${Colors.TRANSPARENT_DARK};
     cursor: pointer;
     position: absolute;
     top: 50%;
     width: auto;
     padding: 7px 9px 7px 6px;
     margin: 2px;
-    color: white;
+    color: ${Colors.PRIMARY_WHITE};
     font-weight: 100;
     font-size: 18px;
     transition: 0.6s ease;
     user-select: none;
     &:hover {
-      background: rgba(0, 0, 0, 0.3);
+      background: ${Colors.TRANSPARENT_DARK};
     }
   }
 
@@ -282,7 +287,10 @@ export const CardListContainer = styled.div<{ numOfItems?: any }>`
   display: flex;
   flex-flow: wrap;
   width: 100%;
-  justify-content: ${(props) => (props.numOfItems && props.numOfItems < 3 ? "space-around" : "space-between")};
+  justify-content: ${(props) =>
+    props.numOfItems && props.numOfItems < 3
+      ? "space-around"
+      : "space-between"};
   gap: 24px;
   @media (max-width: 1380px) {
     justify-content: space-around;

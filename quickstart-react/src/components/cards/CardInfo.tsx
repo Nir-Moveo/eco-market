@@ -1,4 +1,10 @@
-import { Title, Description, Date, InfoContainer, CategoryIcon } from "./CardStyle";
+import {
+  Title,
+  Description,
+  Date,
+  InfoContainer,
+  CategoryIcon,
+} from "./CardStyle";
 import Avatar from "@mui/material/Avatar";
 import React, { Component, useEffect, useState } from "react";
 import { ICard } from "../../types/types";
@@ -86,7 +92,9 @@ const CardInfo = (props: ICard) => {
           {renderInterestedAvatars()}
         </AvatarGroup>
         {interested?.length > 0 && (
-          <span className="interested-text">{(interested?.length > 1 ? "Are" : "Is") + " interested!"}</span>
+          <span className="interested-text">
+            {(interested?.length > 1 ? "Are" : "Is") + " interested!"}
+          </span>
         )}
       </div>
     </InfoContainer>

@@ -41,7 +41,7 @@ const PersonalCardInfo = (props: ICard) => {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    borderRadius: "16px",
+    borderRadius: "8px",
   };
   const styleImg = {
     position: "absolute" as "absolute",

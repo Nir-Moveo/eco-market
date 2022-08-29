@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Colors } from "../../colors";
 
 
 export const UploadContainer = styled.div`
@@ -6,14 +7,14 @@ export const UploadContainer = styled.div`
   display: flex ;
   flex-direction: column ;
   margin-top:8px ;
-  background-color:#F5F6F8 ;
+  background-color:${Colors.PRIMARY_WHITE} ;
   height:194px ;
   justify-content: center;
   align-items: center;  
   .upload-btn {
   margin-top:20px;
   padding: 8px;
-  border: 1px solid #d5d5d5 ;
+  border: 1px solid ${Colors.SECONDARY_GREY} ;
   cursor: pointer;
   border-radius: 5px ;
   }
@@ -42,8 +43,8 @@ img{
     justify-content: center;
     align-items:center ;
     flex-direction: column ;
-background: #F5F6F8;
-border: 1px solid #d5d5d5 ;
+background: ${Colors.GREY};
+border: 1px solid ${Colors.SECONDARY_GREY} ;
 cursor: pointer;
 border-radius: 8px;
 height:88px ;
