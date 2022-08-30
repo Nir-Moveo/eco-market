@@ -25,6 +25,7 @@ export const ModalContainer = styled.div`
   }
 
   .padding-top {
+    color: ${(props) => props.theme.text};
     padding-top: 12px;
     font-style: normal;
     font-weight: 400;
@@ -32,6 +33,7 @@ export const ModalContainer = styled.div`
     line-height: 24px;
   }
   .padding-bottom {
+    color: ${(props) => props.theme.text};
     padding-bottom: 8px;
   }
   .margin-bottom {
@@ -53,7 +55,7 @@ export const ModalWrapper = styled.div`
 export const Title = styled.span`
   font-weight: 700;
   font-size: 24px;
-  color: ${Colors.PRIMARY_BLACK};
+  color: ${(props) => props.theme.text};
   margin-top: 12px;
   margin-bottom: 22px;
   &.personal {

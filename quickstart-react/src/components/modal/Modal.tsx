@@ -7,6 +7,9 @@ import ModalInfo from "./ModalInfo";
 import { ModalWrapper } from "./ModalInfoStyle";
 import Button from "../buttons/Button";
 import { Buttons } from "../../types/types";
+import { Colors } from "../../colors";
+import { useEffect, useState } from "react";
+import { storageGetItem } from "../../services/monday.api";
 
 const style = {
   position: "absolute" as "absolute",
@@ -32,6 +35,25 @@ const ModalComponent = (props: { updateCards: () => void }): JSX.Element => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const toggleTheme = (theme: string) => {
+    const styles = {
+      ".MuiBox-root": {
+        backgroundColor: `${
+          theme !== "light" ? Colors.DARK_THEME_PRIMARY : ""
+        }`,
+        color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+      },
+    };
+    return styles;
+  };
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const theme = await storageGetItem("theme");
+      setTheme(theme);
+    };
+    fetchData();
+  });
 
   return (
     <ModalWrapper>
@@ -50,6 +72,7 @@ const ModalComponent = (props: { updateCards: () => void }): JSX.Element => {
         }}
         disableAutoFocus={true}
         disableEnforceFocus={true}
+        sx={toggleTheme(theme)}
       >
         <Fade in={open}>
           <Box sx={style}>

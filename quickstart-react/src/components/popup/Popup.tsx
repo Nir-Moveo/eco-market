@@ -68,6 +68,10 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
     "align-self": "center",
   };
 
+  const contentStyle = {
+    color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+  };
+
   const getTitle = () => {
     switch (status) {
       case "delete":
@@ -124,10 +128,22 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
     }
   };
 
+  const toggleTheme = (theme: string) => {
+    const styles = {
+      ".MuiDialog-paper.MuiPaper-root": {
+        backgroundColor: `${
+          theme !== "light" ? Colors.DARK_THEME_PRIMARY : ""
+        }`,
+        color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+      },
+    };
+    return styles;
+  };
+
   return (
     <div>
       <Dialog
-        // sx={popupContainer}
+        sx={toggleTheme(theme)}
         PaperProps={{
           style: { borderRadius: 16, padding: 16 },
         }}
@@ -140,7 +156,7 @@ const Popup: React.FC<IPopup> = (props: IPopup) => {
           {getTitle()}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText sx={contentStyle} id="alert-dialog-description">
             {getSubTitle()}
           </DialogContentText>
         </DialogContent>

@@ -7,7 +7,7 @@ export const UploadContainer = styled.div`
   display: flex ;
   flex-direction: column ;
   margin-top:8px ;
-  background-color:${Colors.PRIMARY_WHITE} ;
+  background-color:${(props) => props.theme.background} ;
   height:194px ;
   justify-content: center;
   align-items: center;  
