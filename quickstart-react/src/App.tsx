@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./components/themes";
 
 import "monday-ui-react-core/dist/main.css";
 //Explore more Monday React Components here: https://style.monday.com/
@@ -12,7 +14,8 @@ import {
   initializeGroups,
   setGroupIdsToStorage,
   setColumnIdsToStorage,
-  storageSetItem
+  storageSetItem,
+  listenToContext,
 } from "./services/monday.api";
 import { Columns, Context, Groups } from "./types/types";
 
@@ -23,7 +26,9 @@ const groupsExist = (groups: string[]) => {
 };
 
 const columnsExist = (columns: string[]) => {
-  const regex = new RegExp(`^${Columns.Description}|^${Columns.Category}|^${Columns.Images}|^${Columns.Interested}`);
+  const regex = new RegExp(
+    `^${Columns.Description}|^${Columns.Category}|^${Columns.Images}|^${Columns.Interested}`
+  );
   const filtered = columns.filter((c) => regex.test(c));
   return filtered.length;
 };
@@ -34,10 +39,25 @@ const App = () => {
     return data;
   };
 
+  const callback = async (res: any) => {
+    setTheme(res.data.theme);
+    await storageSetItem("theme", res.data.theme);
+  };
+
+  const listenContext = async (): Promise<any> => {
+    await listenToContext(callback);
+  };
+
+  const [appTheme, setTheme] = useState("light");
+
   useEffect(() => {
     const initializeApp = async () => {
       // Fetch board id
-      const { boardId, user: { id: userId } } = await getContext();
+      const {
+        boardId,
+        user: { id: userId },
+      } = await getContext();
+      listenContext();
       await storageSetItem(Context.BoardID, boardId);
       await storageSetItem(Context.UserID, userId);
       // Check if groups are initialized, if not - initialize
@@ -58,7 +78,9 @@ const App = () => {
 
   return (
     <div className="App">
-      <MainFrame />
+      <ThemeProvider theme={appTheme === "light" ? lightTheme : darkTheme}>
+        <MainFrame />
+      </ThemeProvider>
     </div>
   );
 };

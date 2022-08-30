@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Colors } from "../../../styles/Colors";
+import { Colors } from "../../../colors";
 import { MenuItemProps } from "./SideMenu";
 
 export const SideContainer = styled.div`
@@ -16,13 +16,26 @@ export const MenuItemDiv = styled.div`
   justify-content: flex-start;
   border-radius: 8px;
   align-items: center;
-  height: fit-content;
+  height: 32px;
   cursor: pointer;
   width: 100%;
+  color: ${(props) => {
+    if (props.theme === "light") return Colors.PRIMARY_BLACK;
+    else return Colors.DARK_THEME_TEXT;
+  }};
+
   &:hover {
-    background-color: ${Colors.sideBarHover};
+    background-color: ${(props) => {
+      if (props.theme === "light") return Colors.SIDE_BAR_HOVER;
+      else return Colors.DARK_SIDE_BAR_HOVER;
+    }};
   }
-  background-color: ${(props: MenuItemProps) => (props.isSelected ? Colors.sideBarSelected : "")};
+  background-color: ${(props: MenuItemProps) => {
+    if (props.isSelected) {
+      if (props.theme === "light") return Colors.SIDE_BAR_SELECTED;
+      else return Colors.DARK_SIDE_BAR_SELECTED;
+    } else return "";
+  }};
   &:nth-last-child(2) {
     margin-top: 30vh;
   }
@@ -36,7 +49,7 @@ export const SideBar = styled.div`
   align-content: flex-start;
   border-radius: 8px;
   width: 240px;
-  background-color: ${Colors.sideBarBg};
+  background-color: ${(props) => props.theme.cardBackground};
   margin: 0 32px 0px 32px;
   padding-bottom: 32px;
 `;
@@ -53,4 +66,5 @@ export const SideTitle = styled.span`
   line-height: 24px;
   padding: 24px;
   cursor: default;
+  color: ${(props) => props.theme.text};
 `;

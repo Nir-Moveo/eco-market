@@ -5,7 +5,7 @@ export const TopBar = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  padding: 20px;
-  margin-left:16px
-  
+  margin-left: 28px;
+  padding-top: 28px;
+  padding-bottom: 32px;
 `;

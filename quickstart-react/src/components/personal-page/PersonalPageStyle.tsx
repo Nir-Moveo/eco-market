@@ -3,6 +3,7 @@ import { Colors } from "../../colors";
 
 export const PersonalPageContainer = styled.div`
   width: 100%;
+  color: ${(props) => props.theme.text};
 `;
 export const TabsContainer = styled.div`
   display: flex;

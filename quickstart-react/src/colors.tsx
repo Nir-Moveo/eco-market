@@ -11,8 +11,17 @@ export enum Colors {
   GREEN = "#BBDBC9",
   PRIMARY_WHITE = "#f5f5f5",
   WHITE = "#ffffff",
-
   DARK_GREEN = "#258750",
+  TRANSPARENT_DARK = "#0000004c",
+  BORDER_CARD = "#ebebeb",
+  SIDE_BAR_HOVER = "#E6E9EF",
+  SIDE_BAR_SELECTED = "#cce5ff",
+
+  DARK_THEME_PRIMARY = "#191C32",
+  DARK_THEME_TEXT = "#D5D8DF",
+  DARK_THEME_SECONDARY = "#33354B",
+  DARK_SIDE_BAR_HOVER = "#75768856",
+  DARK_SIDE_BAR_SELECTED = "#8286bb6e"
 }
 
 export const colorsArr = [

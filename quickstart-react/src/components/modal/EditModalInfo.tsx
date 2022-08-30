@@ -14,10 +14,12 @@ import {
   columnIdsFromStorage,
   editItem,
   getItemsByIds,
+  storageGetItem,
 } from "../../services/monday.api";
 import { Buttons, Categories, Columns, Groups, ICard } from "../../types/types";
 import Loader from "../loader/Loader";
 import Button from "../buttons/Button";
+import { Colors } from "../../colors";
 
 interface IPlaceholder {
   updateCard: (card: ICard) => void;
@@ -78,6 +80,24 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
     }
   };
 
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const theme = await storageGetItem("theme");
+      setTheme(theme);
+    };
+    fetchData();
+  });
+
+  const toggleTheme = (theme: string) => {
+    const styles = {
+      ".MuiOutlinedInput-root": {
+        color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+      },
+    };
+    return styles;
+  };
+
   return !isLoading ? (
     <ModalContainer>
       <form
@@ -101,6 +121,7 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
           size="small"
           defaultValue={item?.name ?? ""}
           error={titleError}
+          sx={toggleTheme(theme)}
         />
         <InputLabel className="padding-top" shrink htmlFor="input">
           Item description
@@ -114,6 +135,7 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
           id="input-description"
           size="small"
           defaultValue={item?.description ?? ""}
+          sx={toggleTheme(theme)}
         />
         <ContainerTitle>
           <InputLabel className="padding-top" shrink htmlFor="input">

@@ -1,9 +1,19 @@
 import * as React from "react";
-import { useState } from "react";
-import { getItemsByCategory, getItemsByGroup, getWishlist } from "../../../services/monday.api";
+import { useEffect, useState } from "react";
+import {
+  getItemsByCategory,
+  getItemsByGroup,
+  getWishlist,
+  storageGetItem,
+} from "../../../services/monday.api";
 import { Categories, Groups, ICard, ICardList } from "../../../types/types";
 import MenuItem from "../components/MenuItem";
-import { SideBar, SideTitle, SideContainer, MenuItemDiv } from "./SideMenuStyle";
+import {
+  SideBar,
+  SideTitle,
+  SideContainer,
+  MenuItemDiv,
+} from "./SideMenuStyle";
 import Header from "../../header/Header";
 export interface SideMenuProps {
   setCards(cards: ICardList): void;
@@ -12,6 +22,7 @@ export interface SideMenuProps {
 }
 export interface MenuItemProps {
   isSelected: boolean;
+  theme: string;
 }
 
 const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
@@ -43,6 +54,15 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
     setIsPersonalPage(true);
     setSelectedCategory("personalPage");
   };
+
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const theme = await storageGetItem("theme");
+      setTheme(theme);
+    };
+    fetchData();
+  });
   return (
     <SideContainer>
       <Header />
@@ -56,8 +76,13 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
               key={`menu-item-${index}`}
               onClick={() => selectCategory(category as Categories)}
               isSelected={selectedCategory === category}
+              theme={theme}
             >
-              <MenuItem key={index} itemName={category} itemIcon={lowerCatName} />
+              <MenuItem
+                key={index}
+                itemName={category}
+                itemIcon={lowerCatName}
+              />
             </MenuItemDiv>
           );
         })}
@@ -67,6 +92,7 @@ const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps) => {
           key="menu-item-personal"
           onClick={goToPersonalPage}
           isSelected={selectedCategory === "personalPage"}
+          theme={theme}
         >
           <MenuItem itemName="Personal Page" itemIcon="Personal" />
         </MenuItemDiv>

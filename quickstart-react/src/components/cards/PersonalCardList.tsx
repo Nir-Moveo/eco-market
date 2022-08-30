@@ -14,7 +14,9 @@ const PersonalCardList = (props: IPersonalCardList) => {
   const { type, cards, isLoading } = props;
 
   const renderCards = (cards: ICardList) => {
-    return cards.map((card, key: number) => <PersonalCard type={type} key={card.id} card={card}></PersonalCard>);
+    return cards.map((card, key: number) => (
+      <PersonalCard type={type} key={card.id} card={card}></PersonalCard>
+    ));
   };
 
   const renderSkeleton = (listsToRender: number) => {
@@ -25,7 +27,11 @@ const PersonalCardList = (props: IPersonalCardList) => {
           .map((item, index) => (
             <Skeleton
               key={index}
-              sx={{ bgcolor: Colors.GREY, marginBottom: "24px", borderRadius: "10px" }}
+              sx={{
+                bgcolor: Colors.GREY,
+                marginBottom: "24px",
+                borderRadius: "10px",
+              }}
               variant="rectangular"
               width="100%"
               height="150px"
@@ -34,7 +40,11 @@ const PersonalCardList = (props: IPersonalCardList) => {
       </>
     );
   };
-  return <PersonalCardListContainer>{isLoading ? renderSkeleton(4) : renderCards(cards)}</PersonalCardListContainer>;
+  return (
+    <PersonalCardListContainer>
+      {isLoading ? renderSkeleton(4) : renderCards(cards)}
+    </PersonalCardListContainer>
+  );
 };
 
 export default PersonalCardList;

@@ -14,6 +14,8 @@ export const ContentDiv = styled.div`
   width: 100%;
   max-height: 160vh;
   overflow-y: auto;
+  padding-bottom: 32px;
+  padding-right: 32px;
 `;
 
 export const TopLine = styled.div`
@@ -32,11 +34,13 @@ export const MainTitle = styled.span`
   font-size: 1.5rem;
   line-height: 24px;
   padding-bottom: 8px;
+  color: ${(props) => props.theme.text};
 `;
 
 export const SubTitle = styled.span`
   font-style: normal;
   font-weight: 400;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   line-height: 22px;
+  color: ${(props) => props.theme.text};
 `;

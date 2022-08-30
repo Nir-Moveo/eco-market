@@ -11,6 +11,10 @@ export const fetchContext = () => {
   return monday.get("context");
 };
 
+export const listenToContext = (callback: any) => {
+  return monday.listen("context", callback);
+};
+
 // Storage
 export const storageGetItem = async (key: string) => {
   return monday.storage.instance.getItem(key).then((res) => res.data.value);

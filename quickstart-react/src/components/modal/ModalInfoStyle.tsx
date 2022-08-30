@@ -16,6 +16,7 @@ export const ModalContainer = styled.div`
   }
 
   .button {
+    padding-top: 16px;
     margin: 0 auto;
   }
 
@@ -24,6 +25,7 @@ export const ModalContainer = styled.div`
   }
 
   .padding-top {
+    color: ${(props) => props.theme.text};
     padding-top: 12px;
     font-style: normal;
     font-weight: 400;
@@ -31,6 +33,7 @@ export const ModalContainer = styled.div`
     line-height: 24px;
   }
   .padding-bottom {
+    color: ${(props) => props.theme.text};
     padding-bottom: 8px;
   }
   .margin-bottom {
@@ -39,7 +42,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const Divider = styled.div`
-  border-top: thin solid rgba(0, 0, 0, 0.12);
+  border-top: thin solid ${Colors.TRANSPARENT_DARK}
   margin-top: 12px;
 `;
 export const ModalWrapper = styled.div`
@@ -50,10 +53,9 @@ export const ModalWrapper = styled.div`
   }
 `;
 export const Title = styled.span`
-  margin: 0 auto;
-  font-weight: 500;
-  font-size: 2.2rem;
-  color: ${Colors.PRIMARY_BLACK};
+  font-weight: 700;
+  font-size: 24px;
+  color: ${(props) => props.theme.text};
   margin-top: 12px;
   margin-bottom: 22px;
   &.personal {

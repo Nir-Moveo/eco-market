@@ -7,12 +7,13 @@ import {
   ContainerTitle,
   LoaderContainer,
 } from "./ModalInfoStyle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, InputLabel, TextField } from "@mui/material";
-import { addNewItem } from "../../services/monday.api";
+import { addNewItem, storageGetItem } from "../../services/monday.api";
 import { Buttons, Categories } from "../../types/types";
 import Loader from "../loader/Loader";
 import Button from "../buttons/Button";
+import { Colors } from "../../colors";
 
 const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
   const [item, setItem] = useState<string>("");
@@ -49,6 +50,24 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
     }
   };
 
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const theme = await storageGetItem("theme");
+      setTheme(theme);
+    };
+    fetchData();
+  });
+
+  const toggleTheme = (theme: string) => {
+    const styles = {
+      ".MuiOutlinedInput-root": {
+        color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+      },
+    };
+    return styles;
+  };
+
   return !isLoading ? (
     <ModalContainer>
       <form
@@ -71,6 +90,7 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
           id="input-name"
           size="small"
           error={titleError}
+          sx={toggleTheme(theme)}
         />
         <InputLabel className="padding-top" shrink htmlFor="input">
           Item description
@@ -83,6 +103,7 @@ const ModalInfo = (props: { onClose: () => void; updateCards: () => void }) => {
           required
           id="input-description"
           size="small"
+          sx={toggleTheme(theme)}
         />
         <ContainerTitle>
           <InputLabel className="padding-top" shrink htmlFor="input">

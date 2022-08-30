@@ -7,6 +7,9 @@ import Button from "@mui/material/Button";
 import { ModalWrapper } from "./ModalInfoStyle";
 import { ICard, ICardList } from "../../types/types";
 import EditModalInfo from "./EditModalInfo";
+import { useEffect, useState } from "react";
+import { storageGetItem } from "../../services/monday.api";
+import { Colors } from "../../colors";
 
 const style = {
   position: "absolute" as "absolute",
@@ -19,7 +22,7 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  borderRadius: "16px",
+  borderRadius: "8px",
 };
 const styleImg = {
   position: "absolute" as "absolute",
@@ -43,6 +46,27 @@ const EditModalComponent: React.FC<IPlaceholder> = (props: IPlaceholder) => {
     setShowEdit(false);
   };
 
+  const [theme, setTheme] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const theme = await storageGetItem("theme");
+      setTheme(theme);
+    };
+    fetchData();
+  });
+
+  const toggleTheme = (theme: string) => {
+    const styles = {
+      ".MuiBox-root": {
+        backgroundColor: `${
+          theme !== "light" ? Colors.DARK_THEME_PRIMARY : ""
+        }`,
+        color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+      },
+    };
+    return styles;
+  };
+
   return (
     <ModalWrapper>
       {/* {
@@ -58,6 +82,9 @@ const EditModalComponent: React.FC<IPlaceholder> = (props: IPlaceholder) => {
         BackdropProps={{
           timeout: 500,
         }}
+        disableAutoFocus={true}
+        disableEnforceFocus={true}
+        sx={toggleTheme(theme)}
       >
         <Fade in={show}>
           <Box sx={style}>
@@ -69,7 +96,11 @@ const EditModalComponent: React.FC<IPlaceholder> = (props: IPlaceholder) => {
               height="12"
               width="12"
             />
-            <EditModalInfo item={card} onClose={handleClose} updateCard={(card: ICard) => updateCard(card)} />
+            <EditModalInfo
+              item={card}
+              onClose={handleClose}
+              updateCard={(card: ICard) => updateCard(card)}
+            />
           </Box>
         </Fade>
       </Modal>

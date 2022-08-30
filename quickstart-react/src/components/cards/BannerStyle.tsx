@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Colors } from "../../colors";
 
 export const BannerContainer = styled("div")`
   position: absolute;
@@ -12,8 +13,8 @@ export const BannerContainer = styled("div")`
   .banner {
     padding: 20px;
     grid-column-gap: 20px;
-    background-color: white;
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+    background-color: ${Colors.PRIMARY_WHITE};
+    box-shadow: 0px 8px 24px ${Colors.TRANSPARENT_DARK};
     border-radius: 16px;
     display: flex;
     align-items: center;
