@@ -139,7 +139,7 @@ export const InfoContainer = styled.div`
 export const CardContainer = styled.div`
   position: relative;
   height: 430px;
-  width: clamp(288px, 20%, 380px);
+  width: clamp(288px, 30%, 380px);
   background: ${(props) => props.theme.cardBackground};
   border: 1px solid ${(props) => props.theme.cardBorder};
   color: ${(props) => props.theme.text};
@@ -148,7 +148,7 @@ export const CardContainer = styled.div`
   flex-direction: column;
 
   .avatar-group {
-    padding-right: 4px;
+    padding-right: 8px;
   }
 
   .avatar-group > .MuiAvatar-root,
@@ -161,7 +161,7 @@ export const CardContainer = styled.div`
     cursor: pointer;
   }
   .interested-text {
-    color: ${Colors.DARK_GREEN};
+    color: ${(props) => props.theme.iconColor};
     font-size: 14px;
   }
   .interested-container {
@@ -294,7 +294,7 @@ export const CardListContainer = styled.div<{ numOfItems?: any }>`
     props.numOfItems && props.numOfItems < 3
       ? "space-around"
       : "space-between"};
-  gap: 24px;
+  gap: 40px;
   @media (max-width: 1380px) {
     justify-content: space-around;
   }
