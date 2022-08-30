@@ -14,7 +14,8 @@ export const lightTheme = {
   cardBackground: Colors.GREY,
   background: Colors.PRIMARY_WHITE,
   sidebarHover: Colors.SIDE_BAR_HOVER,
-  sidebarSelected: Colors.SIDE_BAR_SELECTED
+  sidebarSelected: Colors.SIDE_BAR_SELECTED,
+  iconColor: Colors.DARK_GREEN,
 };
 export const darkTheme = {
   body: Colors.DARK_THEME_SECONDARY,
@@ -23,5 +24,6 @@ export const darkTheme = {
   cardBackground: Colors.DARK_THEME_SECONDARY,
   background: Colors.DARK_THEME_PRIMARY,
   sidebarHover: Colors.DARK_SIDE_BAR_HOVER,
-  sidebarSelected: Colors.DARK_SIDE_BAR_SELECTED
+  sidebarSelected: Colors.DARK_SIDE_BAR_SELECTED,
+  iconColor: Colors.DARK_THEME_TEXT,
 };

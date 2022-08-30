@@ -93,6 +93,9 @@ const EditModalInfo: React.FC<IPlaceholder> = (props: IPlaceholder) => {
     const styles = {
       ".MuiOutlinedInput-root": {
         color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
+        border: `1px solid ${
+          theme !== "light" ? Colors.DARK_SIDE_BAR_HOVER : ""
+        }`,
       },
     };
     return styles;
