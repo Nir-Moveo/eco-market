@@ -27,7 +27,9 @@ const RadioCategory = (props: any) => {
   const style = {
     height: "40px",
     color: `${theme !== "light" ? Colors.DARK_THEME_TEXT : ""}`,
-    border: `1px solid ${theme !== "light" ? Colors.DARK_SIDE_BAR_HOVER : ""}`,
+    border: `${
+      theme !== "light" ? `1px solid ${Colors.DARK_SIDE_BAR_HOVER}` : ""
+    }`,
   };
 
   const handleChange = (event: SelectChangeEvent) => {
